@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Bills</string>
+    <string name="main_title">记账小助手</string>
+    <string name="welcome_info">欢迎使用记账小助手！</string>
+    <string name="addBill">记录消费</string>
+    <string name="queryBill">查询消费</string>
+    <string name="bookManage">账本管理</string>
+    <string name="statisticsManage">统计管理</string>
+    <string name="categoryManage">类别管理</string>
+    <string name="userManage">人员管理</string>
+
+</resources>
