@@ -6,37 +6,56 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class StartActivity extends Activity {
+public class StartActivity extends Activity implements OnItemClickListener {
+	private LinearLayout mainLayout;
 	private GridViewAdapter gridViewAdapter;
+	private boolean isClosed = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.start_activity);
-		
+
 		// 隐藏后退按钮
 		ImageView backBotton = (ImageView) this.findViewById(R.id.backButton);
 		backBotton.setVisibility(View.GONE);
-		
+
 		GridView gridMenu = (GridView) this.findViewById(R.id.gridMenu);
 		gridViewAdapter = new GridViewAdapter(this);
 		gridMenu.setAdapter(gridViewAdapter);
+		gridMenu.setOnItemClickListener(this);
+		
+		mainLayout = (LinearLayout) this.findViewById(R.id.mainLayout);
+	}
+	
+	protected void createSlideMenu() {
+		
+	}
+	
+	protected void toggleSlideMenu() {
+		if(isClosed) {
+			// Open menu
+			
+		} else {
+			// Close menu
+		}
 	}
 
 	class GridViewAdapter extends BaseAdapter {
 		private Context context;
 
-		private Integer[] menuIcons = { R.drawable.grid_payout,
-				R.drawable.grid_bill, R.drawable.grid_report,
-				R.drawable.grid_account_book, R.drawable.grid_category,
-				R.drawable.grid_user, };
-		
 		private String[] menuLabels = new String[6];
+
+		private Integer[] menuIcons = { R.drawable.grid_payout, R.drawable.grid_bill, R.drawable.grid_report,
+				R.drawable.grid_account_book, R.drawable.grid_category, R.drawable.grid_user, };
 
 		public GridViewAdapter(Context context) {
 			this.context = context;
@@ -75,16 +94,42 @@ public class StartActivity extends Activity {
 			} else {
 				holder = (Holder) convertView.getTag();
 			}
-			
+
 			holder.menuIcon.setImageResource(menuIcons[position]);
 			holder.menuLabel.setText(menuLabels[position]);
-			
+
 			return convertView;
 		}
-		
+
 		private class Holder {
 			ImageView menuIcon;
 			TextView menuLabel;
+		}
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		switch (position) {
+		case 0:
+
+			break;
+		case 1:
+
+			break;
+		case 2:
+
+			break;
+		case 3:
+
+			break;
+		case 4:
+
+			break;
+		case 5:
+
+			break;
+		default:
+			break;
 		}
 	}
 }
