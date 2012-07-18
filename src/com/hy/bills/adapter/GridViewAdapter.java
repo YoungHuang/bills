@@ -15,10 +15,8 @@ public class GridViewAdapter extends BaseAdapter {
 
 	private String[] menuLabels = new String[6];
 
-	private Integer[] menuIcons = { R.drawable.grid_payout,
-			R.drawable.grid_bill, R.drawable.grid_report,
-			R.drawable.grid_account_book, R.drawable.grid_category,
-			R.drawable.grid_user, };
+	private Integer[] menuIcons = { R.drawable.grid_payout, R.drawable.grid_bill, R.drawable.grid_report,
+			R.drawable.grid_account_book, R.drawable.grid_category, R.drawable.grid_user, };
 
 	public GridViewAdapter(Context context) {
 		this.context = context;
@@ -49,13 +47,10 @@ public class GridViewAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		Holder holder;
 		if (convertView == null) {
-			convertView = LayoutInflater.from(context).inflate(
-					R.layout.grid_menu_item, null);
+			convertView = LayoutInflater.from(context).inflate(R.layout.grid_menu_item, null);
 			holder = new Holder();
-			holder.menuIcon = (ImageView) convertView
-					.findViewById(R.id.menuIcon);
-			holder.menuLabel = (TextView) convertView
-					.findViewById(R.id.menuLabel);
+			holder.menuIcon = (ImageView) convertView.findViewById(R.id.menuIcon);
+			holder.menuLabel = (TextView) convertView.findViewById(R.id.menuLabel);
 			convertView.setTag(holder);
 		} else {
 			holder = (Holder) convertView.getTag();
