@@ -3,17 +3,21 @@ package com.hy.bills.ui;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.hy.bills.adapter.GridViewAdapter;
+import com.hy.bills.adapter.MenuListAdapter;
 
 public class StartActivity extends Activity implements OnItemClickListener {
 	private LinearLayout mainLayout;
-	private GridViewAdapter gridViewAdapter;
+	private RelativeLayout footerLayout;
 	private boolean isClosed = true;
 
 	@Override
@@ -25,16 +29,29 @@ public class StartActivity extends Activity implements OnItemClickListener {
 		ImageView backBotton = (ImageView) this.findViewById(R.id.backButton);
 		backBotton.setVisibility(View.GONE);
 
-		GridView gridMenu = (GridView) this.findViewById(R.id.gridMenu);
-		gridViewAdapter = new GridViewAdapter(this);
-		gridMenu.setAdapter(gridViewAdapter);
-		gridMenu.setOnItemClickListener(this);
+		GridView gridMenuView = (GridView) this.findViewById(R.id.gridMenu);
+		GridViewAdapter gridViewAdapter = new GridViewAdapter(this);
+		gridMenuView.setAdapter(gridViewAdapter);
+		gridMenuView.setOnItemClickListener(this);
 		
 		mainLayout = (LinearLayout) this.findViewById(R.id.mainLayout);
+		footerLayout = (RelativeLayout) this.findViewById(R.id.footer);
+		RelativeLayout bottomBar = (RelativeLayout) this.findViewById(R.id.bottomBar);
+		bottomBar.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				toggleSlideMenu();
+			}
+		});
+		
+		createSlideMenu();
 	}
 	
 	protected void createSlideMenu() {
-		
+		ListView menuListView = (ListView) this.findViewById(R.id.menuList);
+		String[] items = getResources().getStringArray(R.array.SlideMenuActivityMain);
+		MenuListAdapter menuListAdapter = new MenuListAdapter(this, items);
+		menuListView.setAdapter(menuListAdapter);
 	}
 	
 	protected void toggleSlideMenu() {

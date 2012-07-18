@@ -1,34 +1,31 @@
 package com.hy.bills.adapter;
 
-import java.util.List;
-
-import com.hy.bills.ui.R;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.hy.bills.ui.R;
 
 public class MenuListAdapter extends BaseAdapter {
 	private Context context;
-	private List<String> items;
+	private String[] items;
 
-	public MenuListAdapter(Context context, List<String> items) {
+	public MenuListAdapter(Context context, String[] items) {
 		this.context = context;
 		this.items = items;
 	}
 
 	@Override
 	public int getCount() {
-		return items.size();
+		return items.length;
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return items.get(position);
+		return items[position];
 	}
 
 	@Override
@@ -48,7 +45,7 @@ public class MenuListAdapter extends BaseAdapter {
 			holder = (Holder) convertView.getTag();
 		}
 		
-		holder.menuName.setText(items.get(position));
+		holder.menuName.setText(items[position]);
 
 		return convertView;
 	}
