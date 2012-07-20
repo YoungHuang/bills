@@ -33,9 +33,12 @@ public class StartActivity extends Activity implements OnItemClickListener {
 		GridViewAdapter gridViewAdapter = new GridViewAdapter(this);
 		gridMenuView.setAdapter(gridViewAdapter);
 		gridMenuView.setOnItemClickListener(this);
-		
+
 		mainLayout = (LinearLayout) this.findViewById(R.id.mainLayout);
 		footerLayout = (RelativeLayout) this.findViewById(R.id.footer);
+
+		// Create slide menu
+		createSlideMenu();
 		RelativeLayout bottomBar = (RelativeLayout) this.findViewById(R.id.bottomBar);
 		bottomBar.setOnClickListener(new OnClickListener() {
 			@Override
@@ -43,23 +46,25 @@ public class StartActivity extends Activity implements OnItemClickListener {
 				toggleSlideMenu();
 			}
 		});
-		
-		createSlideMenu();
 	}
-	
+
 	protected void createSlideMenu() {
 		ListView menuListView = (ListView) this.findViewById(R.id.menuList);
 		String[] items = getResources().getStringArray(R.array.SlideMenuActivityMain);
 		MenuListAdapter menuListAdapter = new MenuListAdapter(this, items);
 		menuListView.setAdapter(menuListAdapter);
 	}
-	
+
 	protected void toggleSlideMenu() {
-		if(isClosed) {
+		if (isClosed) {
 			// Open menu
-			
+//			mainLayout.setVisibility(View.GONE);
+			footerLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+					LinearLayout.LayoutParams.FILL_PARENT));
 		} else {
 			// Close menu
+//			mainLayout.setVisibility(View.VISIBLE);
+			footerLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, 68));
 		}
 	}
 
