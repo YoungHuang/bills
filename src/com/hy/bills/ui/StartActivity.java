@@ -61,10 +61,12 @@ public class StartActivity extends Activity implements OnItemClickListener {
 //			mainLayout.setVisibility(View.GONE);
 			footerLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
 					LinearLayout.LayoutParams.FILL_PARENT));
+			isClosed = false;
 		} else {
 			// Close menu
 //			mainLayout.setVisibility(View.VISIBLE);
 			footerLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, 68));
+			isClosed = true;
 		}
 	}
 
