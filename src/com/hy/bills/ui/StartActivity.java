@@ -2,8 +2,10 @@ package com.hy.bills.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
@@ -14,6 +16,7 @@ import android.widget.RelativeLayout;
 
 import com.hy.bills.adapter.GridViewAdapter;
 import com.hy.bills.adapter.MenuListAdapter;
+import com.hy.bills.db.SQLiteHelper;
 
 public class StartActivity extends Activity implements OnItemClickListener {
 	private LinearLayout mainLayout;
@@ -25,6 +28,8 @@ public class StartActivity extends Activity implements OnItemClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.start_activity);
 
+		initDB();
+		
 		// 隐藏后退按钮
 		ImageView backBotton = (ImageView) this.findViewById(R.id.backButton);
 		backBotton.setVisibility(View.GONE);
@@ -35,9 +40,21 @@ public class StartActivity extends Activity implements OnItemClickListener {
 		gridMenuView.setOnItemClickListener(this);
 
 		mainLayout = (LinearLayout) this.findViewById(R.id.mainLayout);
+		// 设置菜单键监听器
+		mainLayout.setOnKeyListener(new OnKeyListener() {
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if (keyCode == KeyEvent.KEYCODE_MENU && event.getAction() == KeyEvent.ACTION_UP) {
+					toggleSlideMenu();
+				}
+				
+				return true;
+			}
+		});
+		
 		footerLayout = (RelativeLayout) this.findViewById(R.id.footer);
 
-		// Create slide menu
+		// 创建滑动菜单
 		createSlideMenu();
 		RelativeLayout bottomBar = (RelativeLayout) this.findViewById(R.id.bottomBar);
 		bottomBar.setOnClickListener(new OnClickListener() {
@@ -48,6 +65,11 @@ public class StartActivity extends Activity implements OnItemClickListener {
 		});
 	}
 
+	private void initDB() {
+		SQLiteHelper.setContext(this.getApplicationContext());
+	}
+
+	// 创建滑动菜单
 	protected void createSlideMenu() {
 		ListView menuListView = (ListView) this.findViewById(R.id.menuList);
 		String[] items = getResources().getStringArray(R.array.SlideMenuActivityMain);
@@ -55,16 +77,15 @@ public class StartActivity extends Activity implements OnItemClickListener {
 		menuListView.setAdapter(menuListAdapter);
 	}
 
+	// 菜单隐藏显示切换
 	protected void toggleSlideMenu() {
 		if (isClosed) {
 			// Open menu
-//			mainLayout.setVisibility(View.GONE);
 			footerLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
 					LinearLayout.LayoutParams.FILL_PARENT));
 			isClosed = false;
 		} else {
 			// Close menu
-//			mainLayout.setVisibility(View.VISIBLE);
 			footerLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, 68));
 			isClosed = true;
 		}
