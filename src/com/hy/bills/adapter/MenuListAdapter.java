@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.hy.bills.ui.R;
+import com.hy.bills.activity.R;
 
 public class MenuListAdapter extends BaseAdapter {
 	private Context context;

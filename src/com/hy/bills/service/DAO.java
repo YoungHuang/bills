@@ -34,5 +34,5 @@ public interface DAO<T> {
 	 * @param maxResult
 	 * @return
 	 */
-	public List<T> getScrollData(int offset, int maxResult);
+	public List<T> getScrollData(Integer offset, Integer maxResult);
 }

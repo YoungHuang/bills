@@ -1,5 +1,7 @@
 package com.hy.bills.db;
 
+import com.hy.bills.service.UserService;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -31,8 +33,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		// TODO Auto-generated method stub
-
+		UserService.onCreate(db);
 	}
 
 	@Override

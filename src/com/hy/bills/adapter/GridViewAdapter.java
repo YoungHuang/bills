@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.hy.bills.ui.R;
+import com.hy.bills.activity.R;
 
 public class GridViewAdapter extends BaseAdapter {
 	private Context context;
