@@ -1,7 +1,7 @@
 package com.hy.bills.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,13 +17,16 @@ import android.widget.RelativeLayout;
 import com.hy.bills.adapter.GridViewAdapter;
 import com.hy.bills.adapter.MenuListAdapter;
 
-public class StartActivity extends Activity implements OnItemClickListener {
+public class StartActivity extends BaseActivity implements OnItemClickListener {
+	private static final String TAG = "StartActivity";
+	
 	private LinearLayout mainLayout;
 	private RelativeLayout footerLayout;
 	private boolean isClosed = true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.d(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.start_activity);
 
@@ -102,8 +105,8 @@ public class StartActivity extends Activity implements OnItemClickListener {
 		case 4:
 
 			break;
-		case 5:
-
+		case 5: // 人员管理
+			startActivity(UserActivity.class);
 			break;
 		default:
 			break;
