@@ -16,7 +16,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 public class BaseActivity extends Activity {
-	private LinearLayout mainLayout;
 	private RelativeLayout footerLayout;
 	protected boolean isClosed = true;
 
@@ -24,17 +23,15 @@ public class BaseActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.base_activity);
-		
+
 		footerLayout = (RelativeLayout) this.findViewById(R.id.footer);
-		
-		setMenuKeyListener();
 	}
 
 	protected void appendBodyView(int resource) {
 		LinearLayout bodyLayout = (LinearLayout) findViewById(R.id.bodyLayout);
 		View view = LayoutInflater.from(this).inflate(resource, null);
-		RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-				RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.FILL_PARENT);
+		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
+				LinearLayout.LayoutParams.FILL_PARENT);
 		bodyLayout.addView(view, layoutParams);
 	}
 
@@ -43,30 +40,25 @@ public class BaseActivity extends Activity {
 		ImageView backBotton = (ImageView) this.findViewById(R.id.backButton);
 		backBotton.setVisibility(View.GONE);
 	}
-	
-	// 设置菜单键监听器
-	private void setMenuKeyListener() {
-		mainLayout = (LinearLayout) this.findViewById(R.id.mainLayout);
-		
-		mainLayout.setOnKeyListener(new OnKeyListener() {
-			@Override
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
-				if (keyCode == KeyEvent.KEYCODE_MENU && event.getAction() == KeyEvent.ACTION_UP) {
-					toggleSlideMenu();
-				}
-				
-				return true;
-			}
-		});
+
+	// 设置菜单键
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_MENU) {
+			toggleSlideMenu();
+			
+			return true;
+		}
+		return super.onKeyUp(keyCode, event);
 	}
-	
+
 	// 创建滑动菜单
 	protected void createSlideMenu(int resource) {
 		ListView menuListView = (ListView) this.findViewById(R.id.menuList);
 		String[] items = getResources().getStringArray(resource);
 		MenuListAdapter menuListAdapter = new MenuListAdapter(this, items);
 		menuListView.setAdapter(menuListAdapter);
-		
+
 		RelativeLayout bottomBar = (RelativeLayout) this.findViewById(R.id.bottomBar);
 		bottomBar.setOnClickListener(new OnClickListener() {
 			@Override
@@ -75,21 +67,26 @@ public class BaseActivity extends Activity {
 			}
 		});
 	}
-	
+
 	// 菜单隐藏显示切换
 	protected void toggleSlideMenu() {
+		RelativeLayout.LayoutParams layoutParams = null;
 		if (isClosed) {
 			// Open menu
-			footerLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
-					LinearLayout.LayoutParams.FILL_PARENT));
+			layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT,
+					RelativeLayout.LayoutParams.FILL_PARENT);
+			layoutParams.addRule(RelativeLayout.BELOW, R.id.title);
+			footerLayout.setLayoutParams(layoutParams);
 			isClosed = false;
 		} else {
 			// Close menu
-			footerLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT, 68));
+			layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, 68);
+			layoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+			footerLayout.setLayoutParams(layoutParams);
 			isClosed = true;
 		}
 	}
-	
+
 	protected void startActivity(Class<?> clazz) {
 		Intent intent = new Intent(this, clazz);
 		startActivity(intent);
