@@ -1,7 +1,5 @@
 package com.hy.bills.activity;
 
-import com.hy.bills.adapter.MenuListAdapter;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,11 +7,14 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnKeyListener;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.hy.bills.adapter.MenuListAdapter;
 
 public class BaseActivity extends Activity {
 	private RelativeLayout footerLayout;
@@ -24,7 +25,7 @@ public class BaseActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.base_activity);
 
-		footerLayout = (RelativeLayout) this.findViewById(R.id.footer);
+		footerLayout = (RelativeLayout) this.findViewById(R.id.footerLayout);
 	}
 
 	protected void appendBodyView(int resource) {
@@ -35,6 +36,12 @@ public class BaseActivity extends Activity {
 		bodyLayout.addView(view, layoutParams);
 	}
 
+	// 设置标题
+	protected void setTitle(String title) {
+		TextView textView = (TextView) findViewById(R.id.title);
+		textView.setText(title);
+	}
+	
 	// 隐藏后退按钮
 	protected void hideBackBotton() {
 		ImageView backBotton = (ImageView) this.findViewById(R.id.backButton);
@@ -53,11 +60,13 @@ public class BaseActivity extends Activity {
 	}
 
 	// 创建滑动菜单
-	protected void createSlideMenu(int resource) {
+	protected void createSlideMenu(int resource, OnItemClickListener listener) {
 		ListView menuListView = (ListView) this.findViewById(R.id.menuList);
 		String[] items = getResources().getStringArray(resource);
 		MenuListAdapter menuListAdapter = new MenuListAdapter(this, items);
 		menuListView.setAdapter(menuListAdapter);
+		
+		menuListView.setOnItemClickListener(listener);
 
 		RelativeLayout bottomBar = (RelativeLayout) this.findViewById(R.id.bottomBar);
 		bottomBar.setOnClickListener(new OnClickListener() {
@@ -75,7 +84,7 @@ public class BaseActivity extends Activity {
 			// Open menu
 			layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT,
 					RelativeLayout.LayoutParams.FILL_PARENT);
-			layoutParams.addRule(RelativeLayout.BELOW, R.id.title);
+			layoutParams.addRule(RelativeLayout.BELOW, R.id.titleLayout);
 			footerLayout.setLayoutParams(layoutParams);
 			isClosed = false;
 		} else {

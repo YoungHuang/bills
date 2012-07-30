@@ -27,6 +27,13 @@ public interface DAO<T> {
 	 * @return
 	 */
 	public T find(Integer id);
+	
+	/**
+	 * 查找所有实体
+	 * @param id
+	 * @return
+	 */
+	public List<T> findAll();
 
 	/**
 	 * 获取分页数据

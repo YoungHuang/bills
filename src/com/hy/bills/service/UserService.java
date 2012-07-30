@@ -90,4 +90,21 @@ public class UserService extends DaoSupport<User> {
 
 		return user;
 	}
+
+	@Override
+	public List<User> findAll() {
+		SQLiteDatabase db = sqliteHelper.getReadableDatabase();
+		String sql = "select * from User";
+		Cursor cursor = db.rawQuery(sql, null);
+		try {
+			List<User> userList = new ArrayList<User>();
+			while (cursor.moveToNext()) {
+				userList.add(parseModel(cursor));
+			}
+			
+			return userList;
+		} finally {
+			cursor.close();
+		}
+	}
 }

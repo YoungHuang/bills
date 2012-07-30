@@ -10,5 +10,7 @@
     <string name="statisticsManage">统计管理</string>
     <string name="categoryManage">类别管理</string>
     <string name="userManage">人员管理</string>
+    
+    <string name="UserActivityTitle">人员管理(%s)</string>
 
 </resources>

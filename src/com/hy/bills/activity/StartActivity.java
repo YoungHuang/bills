@@ -20,14 +20,22 @@ public class StartActivity extends BaseActivity implements OnItemClickListener {
 
 		// 隐藏后退按钮
 		hideBackBotton();
+		
+		// 创建滑动菜单
+		createSlideMenu(R.array.SlideMenuStartActivity, new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				toggleSlideMenu();
+				if (position == 0) {
+//					showDatabaseBackupDialog();
+				}
+			}
+		});
 
 		GridView gridMenuView = (GridView) this.findViewById(R.id.gridMenu);
 		GridViewAdapter gridViewAdapter = new GridViewAdapter(this);
 		gridMenuView.setAdapter(gridViewAdapter);
 		gridMenuView.setOnItemClickListener(this);
-
-		// 创建滑动菜单
-		createSlideMenu(R.array.SlideMenuActivityMain);
 	}
 
 	@Override

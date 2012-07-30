@@ -7,11 +7,11 @@
     android:orientation="vertical" >
 
     <include
-        android:id="@+id/title"
+        android:id="@+id/titleLayout"
         layout="@layout/top_title" />
 
     <include
-        android:id="@+id/footer"
+        android:id="@+id/footerLayout"
         layout="@layout/bottom_footer" />
 
     <LinearLayout
@@ -19,7 +19,7 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:orientation="vertical"
-        android:layout_below="@id/title"
-        android:layout_above="@id/footer" />
+        android:layout_below="@id/titleLayout"
+        android:layout_above="@id/footerLayout" />
 
 </RelativeLayout>
