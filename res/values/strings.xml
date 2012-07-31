@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Main menu -->
     <string name="app_name">Bills</string>
     <string name="main_title">记账小助手</string>
     <string name="welcome_info">欢迎使用记账小助手！</string>
@@ -10,7 +11,19 @@
     <string name="statisticsManage">统计管理</string>
     <string name="categoryManage">类别管理</string>
     <string name="userManage">人员管理</string>
-    
-    <string name="UserActivityTitle">人员管理(%s)</string>
+
+    <!-- Activity Title -->
+    <string name="user_activity_title">人员管理(%s)</string>
+
+    <!-- Title -->
+    <string name="user_dialog_title">%s人员</string>
+
+    <!-- Context menu -->
+    <string name="create">新建</string>
+    <string name="edit">修改</string>
+    <string name="delete">删除</string>
+    <string name="save">保存</string>
+    <string name="cancel">取消</string>
+    <string name="user_name_hint">人员名称</string>
 
 </resources>
