@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.hy.bills.MainApplication;
 import com.hy.bills.domain.User;
 import com.hy.bills.service.UserService;
+import com.hy.bills.utils.RegexUtils;
 
 public class UserActivity extends BaseActivity {
 	private static final String TAG = "UserActivity";
@@ -98,25 +99,43 @@ public class UserActivity extends BaseActivity {
 		return true;
 	}
 
-	private void showUserAddOrEditDialog(User user) {
+	private void showUserAddOrEditDialog(final User user) {
 		View view = LayoutInflater.from(this).inflate(R.layout.user_add_edit_dialog, null);
-		EditText editText = (EditText) view.findViewById(R.id.userName);
+		final EditText editText = (EditText) view.findViewById(R.id.userName);
+		
 		String title = "";
-		if (user != null) {
+		if (user != null) { // 更新
 			editText.setText(user.getName());
 			title = getString(R.string.user_dialog_title, new Object[] { getString(R.string.edit) });
-		} else {
+		} else { // 新建
 			title = getString(R.string.user_dialog_title, new Object[] { getString(R.string.create) });
 		}
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(title).setIcon(R.drawable.user_big_icon).setView(view);
+		// 保存
 		builder.setNeutralButton(R.string.save, new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
+				String newName = editText.getText().toString().trim();
+				boolean result = RegexUtils.isChineseLetterNum(newName);
+				if (!result) {
+					
+					return;
+				}
 				
+				if (user != null) { // 更新
+					if (!user.getName().equals(newName)) {
+						user.setName(editText.getText().toString().trim());
+					}
+				} else { // 新建
+					User newUser = new User();
+					newUser.setName(newName);
+					userService.save(newUser);
+				}
 			}
 		});
+		// 取消
 		builder.setNegativeButton(R.string.cancel, new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
