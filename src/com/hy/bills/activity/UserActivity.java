@@ -21,6 +21,7 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hy.bills.MainApplication;
 import com.hy.bills.domain.User;
@@ -87,7 +88,7 @@ public class UserActivity extends BaseActivity {
 		User user = (User) userListAdapter.getItem(adapterContextMenuInfo.position);
 		switch (item.getItemId()) {
 		case R.id.edit:
-			editUser(user);
+			showUserAddOrEditDialog(user);
 			break;
 		case R.id.delete:
 			deleteUser(user);
@@ -102,37 +103,51 @@ public class UserActivity extends BaseActivity {
 	private void showUserAddOrEditDialog(final User user) {
 		View view = LayoutInflater.from(this).inflate(R.layout.user_add_edit_dialog, null);
 		final EditText editText = (EditText) view.findViewById(R.id.userName);
-		
+
 		String title = "";
-		if (user != null) { // 更新
+		if (user != null) { // 更新用户
 			editText.setText(user.getName());
 			title = getString(R.string.user_dialog_title, new Object[] { getString(R.string.edit) });
-		} else { // 新建
+		} else { // 新建用户
 			title = getString(R.string.user_dialog_title, new Object[] { getString(R.string.create) });
 		}
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(title).setIcon(R.drawable.user_big_icon).setView(view);
-		// 保存
+		// 保存按钮
 		builder.setNeutralButton(R.string.save, new OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				String newName = editText.getText().toString().trim();
 				boolean result = RegexUtils.isChineseLetterNum(newName);
 				if (!result) {
-					
+					Toast.makeText(UserActivity.this,
+							getString(R.string.chinese_english_num, new Object[] { newName }), Toast.LENGTH_LONG)
+							.show();
 					return;
 				}
-				
-				if (user != null) { // 更新
-					if (!user.getName().equals(newName)) {
-						user.setName(editText.getText().toString().trim());
+
+				try {
+					if (user != null) { // 更新用户
+						if (!user.getName().equals(newName)) {
+							user.setName(editText.getText().toString().trim());
+
+							userService.update(user);
+
+						}
+					} else { // 新建用户
+						User newUser = new User();
+						newUser.setName(newName);
+						userService.save(newUser);
 					}
-				} else { // 新建
-					User newUser = new User();
-					newUser.setName(newName);
-					userService.save(newUser);
+					
+					userListAdapter.dataChanged();
+				} catch (Exception e) {
+					Log.e(TAG, e.getMessage());
+					Toast.makeText(UserActivity.this, R.string.database_error, Toast.LENGTH_LONG).show();
 				}
+
+				dialog.dismiss();
 			}
 		});
 		// 取消
@@ -145,14 +160,17 @@ public class UserActivity extends BaseActivity {
 		builder.show();
 	}
 
-	private void editUser(User user) {
-		// TODO Auto-generated method stub
-
-	}
-
-	private void deleteUser(User user) {
-		// TODO Auto-generated method stub
-
+	// 删除用户
+	private void deleteUser(final User user) {
+		String title = getString(R.string.delete_prompt);
+		String message = getString(R.string.user_delete_confirm, new Object[] { user.getName() });
+		showAlertDialog(title, message, new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				userService.delete(user.getId());
+				userListAdapter.dataChanged();
+			}
+		});
 	}
 
 	private class UserListAdapter extends BaseAdapter {
@@ -197,6 +215,11 @@ public class UserActivity extends BaseActivity {
 
 		private class Holder {
 			TextView userName;
+		}
+		
+		public void dataChanged() {
+			userList = userService.findAll();
+			this.notifyDataSetChanged();
 		}
 	}
 }

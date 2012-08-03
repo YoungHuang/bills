@@ -1,6 +1,8 @@
 package com.hy.bills.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -99,5 +101,14 @@ public class BaseActivity extends Activity {
 	protected void startActivity(Class<?> clazz) {
 		Intent intent = new Intent(this, clazz);
 		startActivity(intent);
+	}
+	
+	// 显示提醒对话框
+	protected void showAlertDialog(String title, String message, DialogInterface.OnClickListener listener) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(title).setMessage(message);
+		builder.setPositiveButton(R.string.yes, listener);
+		builder.setNegativeButton(R.string.no, null);
+		builder.show();
 	}
 }

@@ -24,6 +24,14 @@
     <string name="delete">删除</string>
     <string name="save">保存</string>
     <string name="cancel">取消</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    <string name="delete_prompt">删除提示</string>
     <string name="user_name_hint">人员名称</string>
+    <string name="user_delete_confirm">你确定要删除%s用户吗?</string>
+
+    <!-- Toast Message -->
+    <string name="chinese_english_num">%s必须是英文、中文与数字</string>
+    <string name="database_error">数据库操作出错</string>
 
 </resources>
