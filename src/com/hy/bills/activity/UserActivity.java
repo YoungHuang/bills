@@ -143,7 +143,7 @@ public class UserActivity extends BaseActivity {
 					
 					userListAdapter.dataChanged();
 				} catch (Exception e) {
-					Log.e(TAG, e.getMessage());
+					Log.e(TAG, "Create or save user error", e);
 					Toast.makeText(UserActivity.this, R.string.database_error, Toast.LENGTH_LONG).show();
 				}
 

@@ -3,10 +3,12 @@ package com.hy.bills;
 import android.app.Application;
 
 import com.hy.bills.db.SQLiteHelper;
+import com.hy.bills.service.DataBaseBackupService;
 import com.hy.bills.service.UserService;
 
 public class MainApplication extends Application {
 	private UserService userService;
+	private DataBaseBackupService dataBaseBackupService;
 
 	@Override
 	public void onCreate() {
@@ -17,6 +19,7 @@ public class MainApplication extends Application {
 
 	private void initVariables() {
 		userService = new UserService();
+		dataBaseBackupService = new DataBaseBackupService(this);
 	}
 
 	private void initDB() {
@@ -25,5 +28,9 @@ public class MainApplication extends Application {
 	
 	public UserService getUserService() {
 		return userService;
+	}
+	
+	public DataBaseBackupService getDataBaseBackupService() {
+		return dataBaseBackupService;
 	}
 }
