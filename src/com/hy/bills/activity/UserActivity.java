@@ -43,7 +43,7 @@ public class UserActivity extends BaseActivity {
 		initVariables();
 
 		// 创建滑动菜单
-		createSlideMenu(R.array.SlideMenuStartActivity, new OnItemClickListener() {
+		createSlideMenu(R.array.SlideMenuUserActivity, new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				toggleSlideMenu();
@@ -131,16 +131,22 @@ public class UserActivity extends BaseActivity {
 					if (user != null) { // 更新用户
 						if (!user.getName().equals(newName)) {
 							user.setName(editText.getText().toString().trim());
-
 							userService.update(user);
-
+							
+							Toast.makeText(UserActivity.this,
+									getString(R.string.edit_success, new Object[] { newName }), Toast.LENGTH_SHORT)
+									.show();
 						}
 					} else { // 新建用户
 						User newUser = new User();
 						newUser.setName(newName);
 						userService.save(newUser);
+						
+						Toast.makeText(UserActivity.this,
+								getString(R.string.create_success, new Object[] { newName }), Toast.LENGTH_SHORT)
+								.show();
 					}
-					
+
 					userListAdapter.dataChanged();
 				} catch (Exception e) {
 					Log.e(TAG, "Create or save user error", e);
@@ -168,6 +174,10 @@ public class UserActivity extends BaseActivity {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				userService.delete(user.getId());
+				Toast.makeText(UserActivity.this,
+						getString(R.string.delete_success, new Object[] { user.getName() }), Toast.LENGTH_SHORT)
+						.show();
+				
 				userListAdapter.dataChanged();
 			}
 		});
@@ -199,10 +209,10 @@ public class UserActivity extends BaseActivity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Holder holder;
 			if (convertView == null) {
-				convertView = LayoutInflater.from(UserActivity.this).inflate(null, null);
+				convertView = LayoutInflater.from(UserActivity.this).inflate(R.layout.user_list_item, null);
 				holder = new Holder();
 				holder.userName = (TextView) convertView.findViewById(R.id.userName);
-				convertView.setTag(convertView);
+				convertView.setTag(holder);
 			} else {
 				holder = (Holder) convertView.getTag();
 			}
@@ -216,7 +226,7 @@ public class UserActivity extends BaseActivity {
 		private class Holder {
 			TextView userName;
 		}
-		
+
 		public void dataChanged() {
 			userList = userService.findAll();
 			this.notifyDataSetChanged();

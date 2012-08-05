@@ -13,8 +13,9 @@ public class MainApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		initVariables();
+		// Must initialize database before initialize services which use database
 		initDB();
+		initVariables();
 	}
 
 	private void initVariables() {

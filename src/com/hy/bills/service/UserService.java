@@ -16,7 +16,7 @@ public class UserService extends DaoSupport<User> {
 	public static void onCreate(SQLiteDatabase db) {
 		Log.d(TAG, "createTable");
 		db.execSQL("create table User(id integer primary key autoincrement, name varchar(20) not null, status integer not null, createDate long not null)");
-		
+
 		// Insert testing data
 		String sql = "insert into User(name, status, createDate) values(?, ?, ?)";
 		for (int i = 0; i < 10; i++) {
@@ -43,7 +43,7 @@ public class UserService extends DaoSupport<User> {
 	@Override
 	public void delete(Integer id) {
 		SQLiteDatabase db = sqliteHelper.getWritableDatabase();
-		String sql = "delete User where id=?";
+		String sql = "delete from User where id=?";
 		db.execSQL(sql, new Object[] { id });
 	}
 
@@ -53,9 +53,11 @@ public class UserService extends DaoSupport<User> {
 		String sql = "select * from User where id=?";
 		Cursor cursor = db.rawQuery(sql, new String[] { id.toString() });
 		try {
-			User user = parseModel(cursor);
-			
-			return user;
+			User user = null;
+			if (cursor.moveToFirst()) {
+				user = parseModel(cursor);
+			}
+				return user;
 		} finally {
 			cursor.close();
 		}
@@ -71,7 +73,7 @@ public class UserService extends DaoSupport<User> {
 			while (cursor.moveToNext()) {
 				userList.add(parseModel(cursor));
 			}
-			
+
 			return userList;
 		} finally {
 			cursor.close();
@@ -80,13 +82,11 @@ public class UserService extends DaoSupport<User> {
 
 	private User parseModel(Cursor cursor) {
 		User user = null;
-		if (cursor.moveToFirst()) {
-			user = new User();
-			user.setId(cursor.getInt(cursor.getColumnIndex("id")));
-			user.setName(cursor.getString(cursor.getColumnIndex("name")));
-			user.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
-			user.setCreateDate(new Date(cursor.getLong(cursor.getColumnIndex("createDate"))));
-		}
+		user = new User();
+		user.setId(cursor.getInt(cursor.getColumnIndex("id")));
+		user.setName(cursor.getString(cursor.getColumnIndex("name")));
+		user.setStatus(cursor.getInt(cursor.getColumnIndex("status")));
+		user.setCreateDate(new Date(cursor.getLong(cursor.getColumnIndex("createDate"))));
 
 		return user;
 	}
@@ -101,7 +101,7 @@ public class UserService extends DaoSupport<User> {
 			while (cursor.moveToNext()) {
 				userList.add(parseModel(cursor));
 			}
-			
+
 			return userList;
 		} finally {
 			cursor.close();
