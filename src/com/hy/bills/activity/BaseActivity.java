@@ -28,6 +28,14 @@ public class BaseActivity extends Activity {
 		setContentView(R.layout.base_activity);
 
 		footerLayout = (RelativeLayout) this.findViewById(R.id.footerLayout);
+		
+		ImageView backButton = (ImageView) this.findViewById(R.id.backButton);
+		backButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
 	}
 
 	protected void appendBodyView(int resource) {
@@ -46,8 +54,8 @@ public class BaseActivity extends Activity {
 	
 	// 隐藏后退按钮
 	protected void hideBackBotton() {
-		ImageView backBotton = (ImageView) this.findViewById(R.id.backButton);
-		backBotton.setVisibility(View.GONE);
+		ImageView backButton = (ImageView) this.findViewById(R.id.backButton);
+		backButton.setVisibility(View.GONE);
 	}
 
 	// 设置菜单键

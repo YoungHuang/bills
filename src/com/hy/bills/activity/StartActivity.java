@@ -27,7 +27,7 @@ public class StartActivity extends BaseActivity implements OnItemClickListener {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				toggleSlideMenu();
 				if (position == 0) {
-//					showDatabaseBackupDialog();
+					showDatabaseBackupDialog();
 				}
 			}
 		});
@@ -62,5 +62,9 @@ public class StartActivity extends BaseActivity implements OnItemClickListener {
 		default:
 			break;
 		}
+	}
+	
+	private void showDatabaseBackupDialog() {
+		
 	}
 }
