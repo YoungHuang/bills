@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@drawable/blue"
+    android:gravity="center"
+    android:padding="10dp" >
 
+    <Button
+        android:id="@+id/dbbackup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/db_backup_button" />
     
+    <Button
+        android:id="@+id/dbrestore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/db_restore_button"
+        android:layout_toRightOf="@id/dbbackup" />
 
 </RelativeLayout>

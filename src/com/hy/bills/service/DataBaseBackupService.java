@@ -28,7 +28,7 @@ public class DataBaseBackupService {
 		this.context = context;
 	}
 
-	// 备份数据库
+	// 数据备份
 	public boolean databaseBackup() {
 		if (checkSDCard()) {
 			try {
@@ -46,7 +46,7 @@ public class DataBaseBackupService {
 		}
 	}
 
-	// 恢复数据库
+	// 数据还原
 	public boolean databaseRestore() {
 		long time = getBackupDate();
 		if (time != 0 && checkSDCard()) {
