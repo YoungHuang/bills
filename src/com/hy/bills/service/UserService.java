@@ -64,6 +64,23 @@ public class UserService extends DaoSupport<User> {
 	}
 
 	@Override
+	public List<User> findAll() {
+		SQLiteDatabase db = sqliteHelper.getReadableDatabase();
+		String sql = "select * from User";
+		Cursor cursor = db.rawQuery(sql, null);
+		try {
+			List<User> userList = new ArrayList<User>();
+			while (cursor.moveToNext()) {
+				userList.add(parseModel(cursor));
+			}
+
+			return userList;
+		} finally {
+			cursor.close();
+		}
+	}
+	
+	@Override
 	public List<User> getScrollData(Integer offset, Integer maxResult) {
 		SQLiteDatabase db = sqliteHelper.getReadableDatabase();
 		String sql = "select * from User limit ?,?";
@@ -79,7 +96,7 @@ public class UserService extends DaoSupport<User> {
 			cursor.close();
 		}
 	}
-
+	
 	private User parseModel(Cursor cursor) {
 		User user = null;
 		user = new User();
@@ -89,22 +106,5 @@ public class UserService extends DaoSupport<User> {
 		user.setCreateDate(new Date(cursor.getLong(cursor.getColumnIndex("createDate"))));
 
 		return user;
-	}
-
-	@Override
-	public List<User> findAll() {
-		SQLiteDatabase db = sqliteHelper.getReadableDatabase();
-		String sql = "select * from User";
-		Cursor cursor = db.rawQuery(sql, null);
-		try {
-			List<User> userList = new ArrayList<User>();
-			while (cursor.moveToNext()) {
-				userList.add(parseModel(cursor));
-			}
-
-			return userList;
-		} finally {
-			cursor.close();
-		}
 	}
 }

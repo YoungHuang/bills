@@ -8,9 +8,11 @@
         <item>建议反馈</item>
         <item>软件更新</item>
     </string-array>
-    
     <string-array name="SlideMenuUserActivity">
         <item>新建人员</item>
+    </string-array>
+    <string-array name="SlideMenuAccountBookActivity">
+        <item>新建账本</item>
     </string-array>
 
 </resources>
