@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_item_selector"
+    android:gravity="center_vertical"
+    android:padding="10dp" >
+
+    <ImageView
+        android:id="@+id/accountBookIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/account_book_big_icon" />
+
+    <TextView
+        android:id="@+id/accountBookName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/accountBookIcon"
+        android:paddingLeft="10dp"
+        android:textColor="#ff000000"
+        android:textSize="20px" />
+
+    <TextView
+        android:id="@+id/totalCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:textColor="#ff000000" />
+
+    <TextView
+        android:id="@+id/totalMoney"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/accountBookName"
+        android:layout_toRightOf="@id/accountBookIcon"
+        android:textColor="#ff666666" />
+
+</RelativeLayout>

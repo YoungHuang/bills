@@ -132,7 +132,7 @@ public class UserActivity extends BaseActivity {
 							userService.update(user);
 							
 							Toast.makeText(UserActivity.this,
-									getString(R.string.edit_success, new Object[] { newName }), Toast.LENGTH_SHORT)
+									getString(R.string.edit_user_success, new Object[] { newName }), Toast.LENGTH_SHORT)
 									.show();
 						}
 					} else { // 新建用户
@@ -141,7 +141,7 @@ public class UserActivity extends BaseActivity {
 						userService.save(newUser);
 						
 						Toast.makeText(UserActivity.this,
-								getString(R.string.create_success, new Object[] { newName }), Toast.LENGTH_SHORT)
+								getString(R.string.create_user_success, new Object[] { newName }), Toast.LENGTH_SHORT)
 								.show();
 					}
 
@@ -173,7 +173,7 @@ public class UserActivity extends BaseActivity {
 			public void onClick(DialogInterface dialog, int which) {
 				userService.delete(user.getId());
 				Toast.makeText(UserActivity.this,
-						getString(R.string.delete_success, new Object[] { user.getName() }), Toast.LENGTH_SHORT)
+						getString(R.string.delete_user_success, new Object[] { user.getName() }), Toast.LENGTH_SHORT)
 						.show();
 				
 				userListAdapter.dataChanged();

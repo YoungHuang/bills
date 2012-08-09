@@ -32,6 +32,7 @@
     <string name="delete_prompt">删除提示</string>
     <string name="user_name_hint">人员名称</string>
     <string name="user_delete_confirm">你确定要删除%s用户吗?</string>
+    <string name="account_book_delete_confirm">账本删除后相关消费记录也会同时删除,你确定要删除%s吗?</string>
     <string name="db_backup_title">数据备份</string>
     <string name="db_backup_button">数据备份</string>
     <string name="db_restore_button">数据还原</string>
@@ -40,9 +41,12 @@
     <string name="chinese_english_num">%s必须是英文、中文与数字</string>
     <string name="database_error">数据库操作出错</string>
     <string name="sdcard_error">SDCard未就绪</string>
-    <string name="create_success">新建用户%s成功</string>
-    <string name="edit_success">修改用户%s成功</string>
-    <string name="delete_success">删除用户%s成功</string>
+    <string name="create_user_success">新建用户%s成功</string>
+    <string name="edit_user_success">修改用户%s成功</string>
+    <string name="delete_user_success">删除用户%s成功</string>
+    <string name="create_account_book_success">新建账本%s成功</string>
+    <string name="edit_account_book_success">修改账本%s成功</string>
+    <string name="delete_account_book_success">删除账本%s成功</string>
     <string name="db_backup_success">数据备份成功</string>
     <string name="db_backup_failed">数据备份失败</string>
     <string name="db_restore_success">数据还原成功</string>

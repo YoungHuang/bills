@@ -7,7 +7,7 @@ public class AccountBook {
 	public final static int STATUS_IDLE = 0;
 	
 	public final static int YES_DEFAULT = 1;
-	public final static int NO_DEFAULT = 0;
+	public final static int NOT_DEFAULT = 0;
 
 	// 账本表主键ID
 	private int id;
@@ -18,7 +18,7 @@ public class AccountBook {
 	// 状态
 	private int status = STATUS_ACTIVE;
 	// 是否默账本
-	private int isDefault = NO_DEFAULT;
+	private int isDefault = NOT_DEFAULT;
 
 	public int getId() {
 		return id;
