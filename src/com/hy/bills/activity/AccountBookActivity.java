@@ -2,6 +2,7 @@ package com.hy.bills.activity;
 
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -25,6 +28,7 @@ import android.widget.Toast;
 import com.hy.bills.domain.AccountBook;
 import com.hy.bills.domain.User;
 import com.hy.bills.service.AccountBookService;
+import com.hy.bills.utils.RegexUtils;
 
 public class AccountBookActivity extends BaseActivity {
 	private static final String TAG = "AccountBookActivity";
@@ -98,8 +102,85 @@ public class AccountBookActivity extends BaseActivity {
 		return true;
 	}
 
-	private void showAccountBookAddOrEditDialog(AccountBook accountBook) {
+	private void showAccountBookAddOrEditDialog(final AccountBook accountBook) {
+		View view = LayoutInflater.from(this).inflate(R.layout.account_book_add_edit_dialog, null);
+		final EditText editText = (EditText) view.findViewById(R.id.accountBookName);
+		final CheckBox checkBox = (CheckBox) view.findViewById(R.id.isDefault);
 
+		String title = "";
+		if (accountBook != null) { // 更新
+			editText.setText(accountBook.getName());
+			if (accountBook.isDefault() == AccountBook.YES_DEFAULT) {
+				checkBox.setChecked(true);
+			}
+			title = getString(R.string.account_book_dialog_title, new Object[] { getString(R.string.edit) });
+		} else { // 新建
+			title = getString(R.string.account_book_dialog_title, new Object[] { getString(R.string.create) });
+		}
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(title).setIcon(R.drawable.account_book_big_icon).setView(view);
+
+		// 保存按钮
+		builder.setNeutralButton(R.string.save, new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				String newName = editText.getText().toString().trim();
+				boolean result = RegexUtils.isChineseLetterNum(newName);
+				if (!result) {
+					Toast.makeText(AccountBookActivity.this,
+							getString(R.string.chinese_english_num, new Object[] { newName }), Toast.LENGTH_LONG)
+							.show();
+					return;
+				}
+
+				try {
+					if (accountBook != null) { // 更新
+						if (!accountBook.getName().equals(newName)) {
+							accountBook.setName(newName);
+							if (checkBox.isChecked()) {
+								accountBook.setDefault(AccountBook.YES_DEFAULT);
+							} else {
+								accountBook.setDefault(AccountBook.NOT_DEFAULT);
+							}
+							accountBookService.update(accountBook);
+
+							Toast.makeText(AccountBookActivity.this,
+									getString(R.string.edit_account_book_success, new Object[] { newName }), Toast.LENGTH_SHORT)
+									.show();
+						}
+					} else { // 新建
+						AccountBook newAccountBook = new AccountBook();
+						newAccountBook.setName(newName);
+						if (checkBox.isChecked()) {
+							newAccountBook.setDefault(AccountBook.YES_DEFAULT);
+						} else {
+							newAccountBook.setDefault(AccountBook.NOT_DEFAULT);
+						}
+						accountBookService.save(newAccountBook);
+
+						Toast.makeText(AccountBookActivity.this,
+								getString(R.string.create_account_book_success, new Object[] { newName }), Toast.LENGTH_SHORT)
+								.show();
+					}
+
+					accountBookListAdapter.dataChanged();
+				} catch (Exception e) {
+					Log.e(TAG, "Create or save account book error", e);
+					Toast.makeText(AccountBookActivity.this, R.string.database_error, Toast.LENGTH_LONG).show();
+				}
+
+				dialog.dismiss();
+			}
+		});
+		// 取消
+		builder.setNegativeButton(R.string.cancel, new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});
+		builder.show();
 	}
 
 	private void deleteAccountBook(final AccountBook accountBook) {

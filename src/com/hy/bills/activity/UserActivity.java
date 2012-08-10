@@ -128,7 +128,7 @@ public class UserActivity extends BaseActivity {
 				try {
 					if (user != null) { // 更新用户
 						if (!user.getName().equals(newName)) {
-							user.setName(editText.getText().toString().trim());
+							user.setName(newName);
 							userService.update(user);
 							
 							Toast.makeText(UserActivity.this,
