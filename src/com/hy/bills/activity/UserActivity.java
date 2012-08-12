@@ -23,6 +23,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hy.bills.MainApplication;
 import com.hy.bills.domain.User;
 import com.hy.bills.service.UserService;
 import com.hy.bills.utils.RegexUtils;
@@ -66,6 +67,7 @@ public class UserActivity extends BaseActivity {
 	}
 
 	private void initVariables() {
+		MainApplication application = (MainApplication) getApplicationContext();
 		userService = application.getUserService();
 	}
 

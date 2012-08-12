@@ -16,11 +16,9 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.hy.bills.MainApplication;
 import com.hy.bills.adapter.MenuListAdapter;
 
 public class BaseActivity extends Activity {
-	protected MainApplication application = (MainApplication) getApplicationContext();
 	private RelativeLayout footerLayout;
 	protected boolean isClosed = true;
 

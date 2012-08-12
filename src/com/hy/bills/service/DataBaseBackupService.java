@@ -68,8 +68,12 @@ public class DataBaseBackupService {
 				return true;
 
 			String sdCardDir = Environment.getExternalStorageDirectory().getAbsolutePath();
-			backupPath = new File(sdCardDir + context.getPackageName() + SQLiteHelper.DATABASE_NAME);
-			
+			File backDir = new File(sdCardDir + "/" + context.getPackageName() + "/");
+			if (!backDir.exists()) {
+				backDir.mkdirs();
+			}
+			backupPath = new File(sdCardDir + "/" + context.getPackageName() + "/" + SQLiteHelper.DATABASE_NAME);
+
 			dbPath = context.getDatabasePath(SQLiteHelper.DATABASE_NAME);
 
 			return true;
@@ -96,11 +100,11 @@ public class DataBaseBackupService {
 		SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
 		sharedPreferences.edit().putLong(BACKUP_DATE, time).commit();
 	}
-	
+
 	// 恢复备份日期
 	private long getBackupDate() {
 		SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
-		
+
 		return sharedPreferences.getLong(BACKUP_DATE, 0);
 	}
 }

@@ -25,8 +25,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hy.bills.MainApplication;
 import com.hy.bills.domain.AccountBook;
-import com.hy.bills.domain.User;
 import com.hy.bills.service.AccountBookService;
 import com.hy.bills.utils.RegexUtils;
 
@@ -70,6 +70,7 @@ public class AccountBookActivity extends BaseActivity {
 	}
 
 	private void initVariables() {
+		MainApplication application = (MainApplication) getApplicationContext();
 		accountBookService = application.getAccountBookService();
 	}
 
@@ -136,19 +137,17 @@ public class AccountBookActivity extends BaseActivity {
 
 				try {
 					if (accountBook != null) { // 更新
-						if (!accountBook.getName().equals(newName)) {
-							accountBook.setName(newName);
-							if (checkBox.isChecked()) {
-								accountBook.setDefault(AccountBook.YES_DEFAULT);
-							} else {
-								accountBook.setDefault(AccountBook.NOT_DEFAULT);
-							}
-							accountBookService.update(accountBook);
-
-							Toast.makeText(AccountBookActivity.this,
-									getString(R.string.edit_account_book_success, new Object[] { newName }), Toast.LENGTH_SHORT)
-									.show();
+						accountBook.setName(newName);
+						if (checkBox.isChecked()) {
+							accountBook.setDefault(AccountBook.YES_DEFAULT);
+						} else {
+							accountBook.setDefault(AccountBook.NOT_DEFAULT);
 						}
+						accountBookService.update(accountBook);
+
+						Toast.makeText(AccountBookActivity.this,
+								getString(R.string.edit_account_book_success, new Object[] { newName }),
+								Toast.LENGTH_SHORT).show();
 					} else { // 新建
 						AccountBook newAccountBook = new AccountBook();
 						newAccountBook.setName(newName);
@@ -160,8 +159,8 @@ public class AccountBookActivity extends BaseActivity {
 						accountBookService.save(newAccountBook);
 
 						Toast.makeText(AccountBookActivity.this,
-								getString(R.string.create_account_book_success, new Object[] { newName }), Toast.LENGTH_SHORT)
-								.show();
+								getString(R.string.create_account_book_success, new Object[] { newName }),
+								Toast.LENGTH_SHORT).show();
 					}
 
 					accountBookListAdapter.dataChanged();
@@ -240,6 +239,8 @@ public class AccountBookActivity extends BaseActivity {
 			AccountBook accountBook = accountBookList.get(position);
 			if (accountBook.isDefault() == AccountBook.YES_DEFAULT) {
 				holder.accountBookIcon.setImageResource(R.drawable.account_book_default);
+			} else {
+				holder.accountBookIcon.setImageResource(R.drawable.account_book_big_icon);
 			}
 			holder.accountBookName.setText(accountBook.getName());
 
