@@ -1,6 +1,7 @@
 package com.hy.bills.db;
 
 import com.hy.bills.service.AccountBookService;
+import com.hy.bills.service.CategoryService;
 import com.hy.bills.service.UserService;
 
 import android.content.Context;
@@ -36,6 +37,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		UserService.onCreate(db);
 		AccountBookService.onCreate(db);
+		CategoryService.onCreate(db);
 	}
 
 	@Override

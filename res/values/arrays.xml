@@ -14,5 +14,9 @@
     <string-array name="SlideMenuAccountBookActivity">
         <item>新建账本</item>
     </string-array>
+    <string-array name="SlideMenuCategoryActivity">
+        <item>新建类别</item>
+        <item>统计类别</item>
+    </string-array>
 
 </resources>

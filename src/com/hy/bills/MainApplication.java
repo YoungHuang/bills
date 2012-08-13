@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.hy.bills.db.SQLiteHelper;
 import com.hy.bills.service.AccountBookService;
+import com.hy.bills.service.CategoryService;
 import com.hy.bills.service.DataBaseBackupService;
 import com.hy.bills.service.UserService;
 
@@ -11,6 +12,7 @@ public class MainApplication extends Application {
 	private DataBaseBackupService dataBaseBackupService;
 	private UserService userService;
 	private AccountBookService accountBookService;
+	private CategoryService categoryService;
 
 	@Override
 	public void onCreate() {
@@ -24,6 +26,7 @@ public class MainApplication extends Application {
 		dataBaseBackupService = new DataBaseBackupService(this);
 		userService = new UserService();
 		accountBookService = new AccountBookService();
+		categoryService = new CategoryService();
 	}
 
 	private void initDB() {
@@ -40,5 +43,9 @@ public class MainApplication extends Application {
 
 	public AccountBookService getAccountBookService() {
 		return accountBookService;
+	}
+	
+	public CategoryService getCategoryService() {
+		return categoryService;
 	}
 }

@@ -22,6 +22,7 @@
         </activity>
         <activity android:name=".UserActivity" />
         <activity android:name=".AccountBookActivity" />
+        <activity android:name=".CategoryActivity" />
     </application>
     
 </manifest>

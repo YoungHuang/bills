@@ -69,8 +69,8 @@ public class StartActivity extends BaseActivity implements OnItemClickListener {
 		case 3: // 账本管理
 			startActivity(AccountBookActivity.class);
 			break;
-		case 4:
-
+		case 4: // 类别管理
+			startActivity(CategoryActivity.class);
 			break;
 		case 5: // 人员管理
 			startActivity(UserActivity.class);
