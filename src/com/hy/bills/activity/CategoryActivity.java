@@ -99,19 +99,34 @@ public class CategoryActivity extends BaseActivity {
 		public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 			GroupHolder groupHolder;
 			if (convertView == null) {
-				convertView = LayoutInflater.from(CategoryActivity.this).inflate(null, null);
+				convertView = LayoutInflater.from(CategoryActivity.this).inflate(R.layout.category_group_list_item, null);
 				groupHolder = new GroupHolder();
+				groupHolder.name = (TextView) convertView.findViewById(R.id.categoryName);
+				groupHolder.count = (TextView) convertView.findViewById(R.id.count);
+				convertView.setTag(groupHolder);
 			} else {
 				groupHolder = (GroupHolder) convertView.getTag();
 			}
-			return null;
+			
+			Category category = groupCategories.get(groupPosition);
+			groupHolder.name.setText(category.getName());
+			int count = categoryService.getChildrenCountByParentId(category.getId());
+			groupHolder.count.setText(getString(R.string.children_category_count, count));
+			
+			return convertView;
 		}
 
 		@Override
 		public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView,
 				ViewGroup parent) {
-			// TODO Auto-generated method stub
-			return null;
+			ChildHolder childHolder;
+			if (convertView == null) {
+				childHolder = new ChildHolder();
+			} else {
+				childHolder = (ChildHolder) convertView.getTag();
+			}
+			
+			return convertView;
 		}
 
 		@Override

@@ -55,4 +55,7 @@
     <string name="db_restore_success">数据还原成功</string>
     <string name="db_restore_failed">数据还原失败</string>
 
+    <!-- other -->
+    <string name="children_category_count">%s子类</string>
+
 </resources>

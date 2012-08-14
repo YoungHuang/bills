@@ -17,8 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/accountBookIcon"
         android:paddingLeft="10dp"
-        android:textColor="#ff000000"
-        android:textSize="20sp" />
+        style="@style/listViewItemStyle" />
 
     <TextView
         android:id="@+id/totalCount"
