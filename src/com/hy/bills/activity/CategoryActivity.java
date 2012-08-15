@@ -4,13 +4,18 @@ import java.util.List;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
 import android.widget.TextView;
 
 import com.hy.bills.MainApplication;
@@ -45,11 +50,61 @@ public class CategoryActivity extends BaseActivity {
 		ExpandableListView categoryExListView = (ExpandableListView) this.findViewById(R.id.categoryExListView);
 		categoryExListViewAdapter = new CategoryExListViewAdapter();
 		categoryExListView.setAdapter(categoryExListViewAdapter);
+
+		// 设置ContextMenu
+		registerForContextMenu(categoryExListView);
+
+		// 设置标题
+		String title = getString(R.string.category_activity_title, categoryService.getCount());
+		setTitle(title);
 	}
 
 	private void initVariables() {
 		MainApplication application = (MainApplication) getApplicationContext();
 		categoryService = application.getCategoryService();
+	}
+
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		ExpandableListContextMenuInfo expandableListContextMenuInfo = (ExpandableListContextMenuInfo) menuInfo;
+		long packedPosition = expandableListContextMenuInfo.packedPosition;
+		int type = ExpandableListView.getPackedPositionType(packedPosition);
+		int groupPosition = ExpandableListView.getPackedPositionGroup(packedPosition);
+		Category category = null;
+		switch (type) {
+		case ExpandableListView.PACKED_POSITION_TYPE_GROUP:
+			category = (Category) categoryExListViewAdapter.getGroup(groupPosition);
+			break;
+		case ExpandableListView.PACKED_POSITION_TYPE_CHILD:
+			int childPosition = ExpandableListView.getPackedPositionChild(packedPosition);
+			category = (Category) categoryExListViewAdapter.getChild(groupPosition, childPosition);
+			break;
+		}
+
+		menu.setHeaderIcon(R.drawable.category_small_icon);
+		menu.setHeaderTitle(category.getName());
+
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.category_context_menu, menu);
+	}
+
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.edit:
+			
+			break;
+		case R.id.delete:
+			
+			break;
+		case R.id.statistic:
+
+			break;
+		default:
+			return super.onContextItemSelected(item);
+		}
+
+		return true;
 	}
 
 	private class CategoryExListViewAdapter extends BaseExpandableListAdapter {
@@ -99,7 +154,8 @@ public class CategoryActivity extends BaseActivity {
 		public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 			GroupHolder groupHolder;
 			if (convertView == null) {
-				convertView = LayoutInflater.from(CategoryActivity.this).inflate(R.layout.category_group_list_item, null);
+				convertView = LayoutInflater.from(CategoryActivity.this).inflate(R.layout.category_group_list_item,
+						null);
 				groupHolder = new GroupHolder();
 				groupHolder.name = (TextView) convertView.findViewById(R.id.categoryName);
 				groupHolder.count = (TextView) convertView.findViewById(R.id.count);
@@ -107,12 +163,12 @@ public class CategoryActivity extends BaseActivity {
 			} else {
 				groupHolder = (GroupHolder) convertView.getTag();
 			}
-			
+
 			Category category = groupCategories.get(groupPosition);
 			groupHolder.name.setText(category.getName());
 			int count = categoryService.getChildrenCountByParentId(category.getId());
 			groupHolder.count.setText(getString(R.string.children_category_count, count));
-			
+
 			return convertView;
 		}
 
@@ -121,11 +177,20 @@ public class CategoryActivity extends BaseActivity {
 				ViewGroup parent) {
 			ChildHolder childHolder;
 			if (convertView == null) {
+				convertView = LayoutInflater.from(CategoryActivity.this).inflate(R.layout.category_child_list_item,
+						null);
 				childHolder = new ChildHolder();
+				childHolder.name = (TextView) convertView.findViewById(R.id.categoryName);
+				convertView.setTag(childHolder);
 			} else {
 				childHolder = (ChildHolder) convertView.getTag();
 			}
-			
+
+			Category groupCategory = groupCategories.get(groupPosition);
+			List<Category> childrenCategories = categoryService.findAllCategoriesByParentId(groupCategory.getId());
+			Category childCategory = childrenCategories.get(childPosition);
+			childHolder.name.setText(childCategory.getName());
+
 			return convertView;
 		}
 

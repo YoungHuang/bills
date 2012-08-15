@@ -62,7 +62,7 @@ public class UserActivity extends BaseActivity {
 		registerForContextMenu(userListView);
 
 		// 设置标题
-		String title = getString(R.string.user_activity_title, new Object[] { userListAdapter.getCount() });
+		String title = getString(R.string.user_activity_title, userListAdapter.getCount());
 		setTitle(title);
 	}
 
@@ -122,7 +122,7 @@ public class UserActivity extends BaseActivity {
 				boolean result = RegexUtils.isChineseLetterNum(newName);
 				if (!result) {
 					Toast.makeText(UserActivity.this,
-							getString(R.string.chinese_english_num, new Object[] { newName }), Toast.LENGTH_LONG)
+							getString(R.string.chinese_english_num, newName), Toast.LENGTH_LONG)
 							.show();
 					return;
 				}
@@ -134,7 +134,7 @@ public class UserActivity extends BaseActivity {
 							userService.update(user);
 							
 							Toast.makeText(UserActivity.this,
-									getString(R.string.edit_user_success, new Object[] { newName }), Toast.LENGTH_SHORT)
+									getString(R.string.edit_user_success, newName), Toast.LENGTH_SHORT)
 									.show();
 						}
 					} else { // 新建用户
@@ -143,7 +143,7 @@ public class UserActivity extends BaseActivity {
 						userService.save(newUser);
 						
 						Toast.makeText(UserActivity.this,
-								getString(R.string.create_user_success, new Object[] { newName }), Toast.LENGTH_SHORT)
+								getString(R.string.create_user_success, newName), Toast.LENGTH_SHORT)
 								.show();
 					}
 

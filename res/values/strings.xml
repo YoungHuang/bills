@@ -15,6 +15,7 @@
     <!-- Activity Title -->
     <string name="user_activity_title">人员管理(%s)</string>
     <string name="account_book_activity_title">账本管理(%s)</string>
+    <string name="category_activity_title">类别管理(%s)</string>
 
     <!-- Title -->
     <string name="user_dialog_title">%s人员</string>
@@ -24,6 +25,7 @@
     <string name="create">新建</string>
     <string name="edit">修改</string>
     <string name="delete">删除</string>
+    <string name="statistic">统计类别</string>
 
     <!-- Dialog -->
     <string name="save">保存</string>

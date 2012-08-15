@@ -50,6 +50,11 @@ public class CategoryService extends DaoSupport<Category> {
 		return null;
 	}
 	
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
 	public List<Category> findAllRootCategories() {
 		// TODO Auto-generated method stub
 		return null;
