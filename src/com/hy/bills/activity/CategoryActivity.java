@@ -2,6 +2,7 @@ package com.hy.bills.activity;
 
 import java.util.List;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -41,7 +42,11 @@ public class CategoryActivity extends BaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				toggleSlideMenu();
-				if (position == 0) {
+				if (position == 0) { // 新建类别
+					Intent intent = new Intent(CategoryActivity.this, CategoryAddOrEditActivity.class);
+					startActivityForResult(intent, 0);
+				} else if (position == 1) { // 统计类别
+					
 				}
 			}
 		});

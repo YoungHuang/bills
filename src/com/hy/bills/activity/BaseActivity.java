@@ -58,6 +58,12 @@ public class BaseActivity extends Activity {
 		backButton.setVisibility(View.GONE);
 	}
 
+	// 隐藏底栏
+	protected void hideFooterLayout() {
+		RelativeLayout mainLayout = (RelativeLayout) this.findViewById(R.id.mainLayout);
+		mainLayout.removeView(footerLayout);
+	}
+	
 	// 设置菜单键
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
