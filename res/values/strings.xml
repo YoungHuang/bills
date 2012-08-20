@@ -42,6 +42,7 @@
     <string name="db_backup_title">数据备份</string>
     <string name="db_backup_button">数据备份</string>
     <string name="db_restore_button">数据还原</string>
+    <string name="category_delete_confirm">你确定要删除%s类别吗?</string>
 
     <!-- Toast Message -->
     <string name="chinese_english_num">%s必须是英文、中文与数字</string>
@@ -57,6 +58,9 @@
     <string name="db_backup_failed">数据备份失败</string>
     <string name="db_restore_success">数据还原成功</string>
     <string name="db_restore_failed">数据还原失败</string>
+    <string name="create_category_success">新建类别%s成功</string>
+    <string name="edit_category_success">修改类别%s成功</string>
+    <string name="delete_category_success">删除类别%s成功</string>
 
     <!-- other -->
     <string name="children_category_count">%s子类</string>

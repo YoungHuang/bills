@@ -57,7 +57,7 @@ public class UserService extends DaoSupport<User> {
 			if (cursor.moveToFirst()) {
 				user = parseModel(cursor);
 			}
-				return user;
+			return user;
 		} finally {
 			cursor.close();
 		}
@@ -79,7 +79,7 @@ public class UserService extends DaoSupport<User> {
 			cursor.close();
 		}
 	}
-	
+
 	@Override
 	public List<User> getScrollData(Integer offset, Integer maxResult) {
 		SQLiteDatabase db = sqliteHelper.getReadableDatabase();
@@ -96,10 +96,9 @@ public class UserService extends DaoSupport<User> {
 			cursor.close();
 		}
 	}
-	
+
 	private User parseModel(Cursor cursor) {
-		User user = null;
-		user = new User();
+		User user = new User();
 		user.setId(cursor.getInt(cursor.getColumnIndex("id")));
 		user.setName(cursor.getString(cursor.getColumnIndex("name")));
 		user.setStatus(cursor.getInt(cursor.getColumnIndex("status")));

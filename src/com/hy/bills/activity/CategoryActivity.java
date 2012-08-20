@@ -2,7 +2,9 @@ package com.hy.bills.activity;
 
 import java.util.List;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -16,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
 import android.widget.TextView;
 
@@ -28,6 +31,8 @@ public class CategoryActivity extends BaseActivity {
 
 	private CategoryService categoryService;
 	private CategoryExListViewAdapter categoryExListViewAdapter;
+
+	private Category category;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +51,7 @@ public class CategoryActivity extends BaseActivity {
 					Intent intent = new Intent(CategoryActivity.this, CategoryAddOrEditActivity.class);
 					startActivityForResult(intent, 0);
 				} else if (position == 1) { // 统计类别
-					
+
 				}
 			}
 		});
@@ -75,7 +80,6 @@ public class CategoryActivity extends BaseActivity {
 		long packedPosition = expandableListContextMenuInfo.packedPosition;
 		int type = ExpandableListView.getPackedPositionType(packedPosition);
 		int groupPosition = ExpandableListView.getPackedPositionGroup(packedPosition);
-		Category category = null;
 		switch (type) {
 		case ExpandableListView.PACKED_POSITION_TYPE_GROUP:
 			category = (Category) categoryExListViewAdapter.getGroup(groupPosition);
@@ -97,10 +101,11 @@ public class CategoryActivity extends BaseActivity {
 	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.edit:
-			
+			Intent intent = new Intent(this, CategoryAddOrEditActivity.class);
+			intent.putExtra("categoryId", category.getId());
 			break;
 		case R.id.delete:
-			
+			deleteCategory();
 			break;
 		case R.id.statistic:
 
@@ -110,6 +115,28 @@ public class CategoryActivity extends BaseActivity {
 		}
 
 		return true;
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		categoryExListViewAdapter.dataChanged();
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+	private void deleteCategory() {
+		String title = getString(R.string.delete_prompt);
+		String message = getString(R.string.category_delete_confirm, category.getName());
+		showAlertDialog(title, message, new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				categoryService.deleteChildrenByParentId(category.getId());
+				categoryService.delete(category.getId());
+				Toast.makeText(CategoryActivity.this, getString(R.string.delete_category_success, category.getName()),
+						Toast.LENGTH_SHORT).show();
+
+				categoryExListViewAdapter.dataChanged();
+			}
+		});
 	}
 
 	private class CategoryExListViewAdapter extends BaseExpandableListAdapter {
@@ -207,6 +234,11 @@ public class CategoryActivity extends BaseActivity {
 		@Override
 		public boolean hasStableIds() {
 			return false;
+		}
+
+		public void dataChanged() {
+			groupCategories = categoryService.findAllRootCategories();
+			this.notifyDataSetChanged();
 		}
 
 		class GroupHolder {
