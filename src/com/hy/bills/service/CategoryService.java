@@ -1,5 +1,6 @@
 package com.hy.bills.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -8,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.hy.bills.domain.Category;
-import com.hy.bills.domain.User;
 
 public class CategoryService extends DaoSupport<Category> {
 	private static final String TAG = "CategoryService";
@@ -71,41 +71,106 @@ public class CategoryService extends DaoSupport<Category> {
 
 	@Override
 	public List<Category> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		SQLiteDatabase db = sqliteHelper.getReadableDatabase();
+		String sql = "select * from Category";
+		Cursor cursor = db.rawQuery(sql, null);
+		try {
+			List<Category> categoryList = new ArrayList<Category>();
+			while (cursor.moveToNext()) {
+				categoryList.add(parseModel(cursor));
+			}
+
+			return categoryList;
+		} finally {
+			cursor.close();
+		}
 	}
 
 	@Override
 	public List<Category> getScrollData(Integer offset, Integer maxResult) {
-		// TODO Auto-generated method stub
-		return null;
+		SQLiteDatabase db = sqliteHelper.getReadableDatabase();
+		String sql = "select * from Category limit ?,?";
+		Cursor cursor = db.rawQuery(sql, new String[] { offset.toString(), maxResult.toString() });
+		try {
+			List<Category> categoryList = new ArrayList<Category>();
+			while (cursor.moveToNext()) {
+				categoryList.add(parseModel(cursor));
+			}
+
+			return categoryList;
+		} finally {
+			cursor.close();
+		}
 	}
 
-	public void deleteChildrenByParentId(Integer id) {
-		// TODO Auto-generated method stub
-
+	public void deleteChildrenByParentId(Integer parentId) {
+		SQLiteDatabase db = sqliteHelper.getWritableDatabase();
+		String sql = "delete from Category where parentId=?";
+		db.execSQL(sql, new Object[] { parentId });
 	}
 
 	public int getCount() {
-		// TODO Auto-generated method stub
-		return 0;
+		SQLiteDatabase db = sqliteHelper.getReadableDatabase();
+		String sql = "select count(*) from Category";
+		Cursor cursor = db.rawQuery(sql, null);
+		try {
+			int count = 0;
+			if (cursor.moveToFirst()) {
+				count = cursor.getInt(0);
+			}
+			return count;
+		} finally {
+			cursor.close();
+		}
 	}
 
 	public List<Category> findAllRootCategories() {
-		// TODO Auto-generated method stub
-		return null;
+		SQLiteDatabase db = sqliteHelper.getReadableDatabase();
+		String sql = "select * from Category where parentId=0";
+		Cursor cursor = db.rawQuery(sql, null);
+		try {
+			List<Category> categoryList = new ArrayList<Category>();
+			while (cursor.moveToNext()) {
+				categoryList.add(parseModel(cursor));
+			}
+
+			return categoryList;
+		} finally {
+			cursor.close();
+		}
 	}
 
-	public List<Category> findAllCategoriesByParentId(Integer parentId) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Category> findAllChildrenByParentId(Integer parentId) {
+		SQLiteDatabase db = sqliteHelper.getReadableDatabase();
+		String sql = "select * from Category where parentId=?";
+		Cursor cursor = db.rawQuery(sql, new String[] { parentId.toString() });
+		try {
+			List<Category> categoryList = new ArrayList<Category>();
+			while (cursor.moveToNext()) {
+				categoryList.add(parseModel(cursor));
+			}
+
+			return categoryList;
+		} finally {
+			cursor.close();
+		}
 	}
 
 	public int getChildrenCountByParentId(Integer parentId) {
-		// TODO Auto-generated method stub
-		return 0;
+		SQLiteDatabase db = sqliteHelper.getReadableDatabase();
+		String sql = "select count(*) from Category where parentId=?";
+		Cursor cursor = db.rawQuery(sql, new String[] { parentId.toString() });
+		try {
+			int count = 0;
+			if (cursor.moveToFirst()) {
+				count = cursor.getInt(0);
+			}
+			return count;
+		} finally {
+			cursor.close();
+		}
 	}
-	
+
 	private Category parseModel(Cursor cursor) {
 		Category category = new Category();
 		category.setId(cursor.getInt(cursor.getColumnIndex("id")));
@@ -114,7 +179,7 @@ public class CategoryService extends DaoSupport<Category> {
 		category.setType(cursor.getInt(cursor.getColumnIndex("type")));
 		category.setParentId(cursor.getInt(cursor.getColumnIndex("parentId")));
 		category.setCreateDate(new Date(cursor.getLong(cursor.getColumnIndex("createDate"))));
-		
+
 		return category;
 	}
 }

@@ -167,7 +167,7 @@ public class CategoryActivity extends BaseActivity {
 		@Override
 		public Object getChild(int groupPosition, int childPosition) {
 			Category groupCategory = groupCategories.get(groupPosition);
-			List<Category> childrenCategories = categoryService.findAllCategoriesByParentId(groupCategory.getId());
+			List<Category> childrenCategories = categoryService.findAllChildrenByParentId(groupCategory.getId());
 
 			return childrenCategories.get(childPosition);
 		}
@@ -219,7 +219,7 @@ public class CategoryActivity extends BaseActivity {
 			}
 
 			Category groupCategory = groupCategories.get(groupPosition);
-			List<Category> childrenCategories = categoryService.findAllCategoriesByParentId(groupCategory.getId());
+			List<Category> childrenCategories = categoryService.findAllChildrenByParentId(groupCategory.getId());
 			Category childCategory = childrenCategories.get(childPosition);
 			childHolder.name.setText(childCategory.getName());
 

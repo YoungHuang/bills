@@ -23,6 +23,8 @@
         <activity android:name=".UserActivity" />
         <activity android:name=".AccountBookActivity" />
         <activity android:name=".CategoryActivity" />
+        <activity android:name=".CategoryAddOrEditActivity" />
+        <activity android:name=".BillAddOrEditActivity" />
     </application>
     
 </manifest>

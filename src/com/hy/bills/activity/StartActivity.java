@@ -57,8 +57,8 @@ public class StartActivity extends BaseActivity implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		switch (position) {
-		case 0:
-
+		case 0: // 记录消费
+			startActivity(BillAddOrEditActivity.class);
 			break;
 		case 1:
 

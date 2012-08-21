@@ -1,6 +1,7 @@
 package com.hy.bills.db;
 
 import com.hy.bills.service.AccountBookService;
+import com.hy.bills.service.BillService;
 import com.hy.bills.service.CategoryService;
 import com.hy.bills.service.UserService;
 
@@ -38,6 +39,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 		UserService.onCreate(db);
 		AccountBookService.onCreate(db);
 		CategoryService.onCreate(db);
+		BillService.onCreate(db);
 	}
 
 	@Override
@@ -45,5 +47,4 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 		// TODO Auto-generated method stub
 
 	}
-
 }

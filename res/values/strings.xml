@@ -66,5 +66,6 @@
     <string name="children_category_count">%s子类</string>
     <string name="category_name">类别名称</string>
     <string name="parent_category">所属分类</string>
+    <string name="select_account_book">选择账本</string>
 
 </resources>
