@@ -3,9 +3,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+    <LinearLayout
+        android:id="@+id/nav"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" >
+
+        <Button
+            android:id="@+id/saveButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:layout_weight="1" />
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cancel"
+            android:layout_weight="1" />
+    </LinearLayout>
+
     <ScrollView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_above="@id/nav" >
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -44,32 +66,125 @@
                 android:layout_height="wrap_content" >
 
                 <ImageView
-                    android:id="@+id/accountIcon"
+                    android:id="@+id/amountIcon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/payout_small_icon" />
 
                 <Button
-                    android:id="@+id/selectAccountbook"
+                    android:id="@+id/inputAmount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:text="@string/select_account_book" />
+                    android:text="@string/input_amount" />
 
                 <EditText
-                    android:id="@+id/accountBookName"
+                    android:id="@+id/amount"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@id/selectAccountbook"
-                    android:layout_toRightOf="@id/accountIcon"
+                    android:layout_toLeftOf="@id/inputAmount"
+                    android:layout_toRightOf="@id/amountIcon"
+                    android:inputType="numberDecimal"
+                    android:maxLength="5" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:id="@+id/categoryIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/category_small_icon" />
+
+                <Button
+                    android:id="@+id/selectCategory"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/select_category" />
+
+                <AutoCompleteTextView
+                    android:id="@+id/categoryName"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@id/selectCategory"
+                    android:layout_toRightOf="@id/categoryIcon"
+                    android:completionThreshold="1"
+                    android:dropDownWidth="fill_parent"
+                    android:hint="@string/select_category_hint"
+                    android:singleLine="true"
+                    android:textColor="#ff000000" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+id/selectBillDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/select_bill_date" />
+
+                <EditText
+                    android:id="@+id/billDate"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@id/selectBillDate"
                     android:focusable="false" />
             </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+id/selectBillType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/select_bill_type" />
+
+                <EditText
+                    android:id="@+id/billType"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@id/selectBillType"
+                    android:focusable="false" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" >
+
+                <Button
+                    android:id="@+id/selectUsers"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="@string/select_bill_type" />
+
+                <EditText
+                    android:id="@+id/userList"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@id/selectUsers"
+                    android:focusable="false"
+                    android:hint="@string/select_user_hint"
+                    android:singleLine="true" />
+            </RelativeLayout>
+
+            <EditText
+                android:id="@+id/comment"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:hint="@string/input_comment_hint"
+                android:lines="7"
+                android:maxLength="256" />
         </LinearLayout>
     </ScrollView>
-
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-    </LinearLayout>
 
 </RelativeLayout>

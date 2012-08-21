@@ -28,10 +28,30 @@ public class BillAddOrEditActivity extends BaseActivity {
 		if (id != -1) {
 			bill = billService.find(id);
 		}
+		
+		// 设置标题
+		setTitle();
+		
+		initView();
 	}
 	
 	private void initVariables() {
 		MainApplication application = (MainApplication) getApplicationContext();
 		billService = application.getBillService();
+	}
+	
+	private void setTitle() {
+		// 设置标题
+		String title;
+		if (bill == null) {
+			title = getString(R.string.bill_add_edit_title, getString(R.string.create));
+		} else {
+			title = getString(R.string.bill_add_edit_title, getString(R.string.edit));
+		}
+		setTitle(title);
+	}
+	
+	private void initView() {
+		
 	}
 }
