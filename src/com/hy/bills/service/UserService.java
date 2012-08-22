@@ -97,6 +97,22 @@ public class UserService extends DaoSupport<User> {
 		}
 	}
 
+	public List<User> findAllByIds(String ids) {
+		SQLiteDatabase db = sqliteHelper.getReadableDatabase();
+		String sql = "select * from User where id in (?)";
+		Cursor cursor = db.rawQuery(sql, new String[] { ids });
+		try {
+			List<User> userList = new ArrayList<User>();
+			while (cursor.moveToNext()) {
+				userList.add(parseModel(cursor));
+			}
+
+			return userList;
+		} finally {
+			cursor.close();
+		}
+	}
+
 	private User parseModel(Cursor cursor) {
 		User user = new User();
 		user.setId(cursor.getInt(cursor.getColumnIndex("id")));

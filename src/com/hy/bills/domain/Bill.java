@@ -28,7 +28,7 @@ public class Bill {
 	// 计算方式
 	private String billType;
 	// 消费人ID外键
-	private String userId;
+	private String userIds;
 	// 备注
 	private String comment;
 	// 添加日期
@@ -116,12 +116,12 @@ public class Bill {
 		this.billType = billType;
 	}
 
-	public String getUserId() {
-		return userId;
+	public String getUserIds() {
+		return userIds;
 	}
 
-	public void setUserId(String userId) {
-		this.userId = userId;
+	public void setUserIds(String userIds) {
+		this.userIds = userIds;
 	}
 
 	public String getComment() {

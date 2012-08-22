@@ -87,6 +87,21 @@ public class AccountBookService extends DaoSupport<AccountBook> {
 		return null;
 	}
 	
+	public AccountBook getDefaultAccountBook() {
+		SQLiteDatabase db = sqliteHelper.getReadableDatabase();
+		String sql = "select * from AccountBook where isDefault=1";
+		Cursor cursor = db.rawQuery(sql, null);
+		try {
+			AccountBook accountBook = null;
+			if (cursor.moveToFirst()) {
+				accountBook = parseModel(cursor);
+			}
+				return accountBook;
+		} finally {
+			cursor.close();
+		}
+	}
+	
 	private AccountBook parseModel(Cursor cursor) {
 		AccountBook accountBook = null;
 		accountBook = new AccountBook();
