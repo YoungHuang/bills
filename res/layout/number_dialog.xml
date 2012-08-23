@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="10dp" >
+
+    <Button
+        android:id="@+id/btnDot"
+        style="@style/numberButtonStyle"
+        android:layout_width="63dp"
+        android:layout_height="63dp"
+        android:layout_alignParentTop="true"
+        android:text="." />
+
+    <EditText
+        android:id="@+id/inputText"
+        android:layout_width="188dp"
+        android:layout_height="63dp"
+        android:layout_toRightOf="@id/btnDot"
+        android:focusable="false"
+        android:gravity="center_horizontal" />
+
+    <Button
+        android:id="@+id/btnOne"
+        style="@style/numberButtonStyle"
+        android:layout_width="63dp"
+        android:layout_height="63dp"
+        android:layout_below="@id/inputText"
+        android:text="1" />
+
+    <Button
+        android:id="@+id/btnTwo"
+        style="@style/numberButtonStyle"
+        android:layout_width="63dp"
+        android:layout_height="63dp"
+        android:layout_below="@id/inputText"
+        android:layout_toRightOf="@id/btnOne"
+        android:text="2" />
+
+    <Button
+        android:id="@+id/btnThree"
+        style="@style/numberButtonStyle"
+        android:layout_width="63dp"
+        android:layout_height="63dp"
+        android:layout_below="@id/inputText"
+        android:layout_toRightOf="@id/btnTwo"
+        android:text="3" />
+
+    <Button
+        android:id="@+id/btnFour"
+        style="@style/numberButtonStyle"
+        android:layout_width="63dp"
+        android:layout_height="63dp"
+        android:layout_below="@id/inputText"
+        android:layout_toRightOf="@id/btnThree"
+        android:text="4" />
+
+    <Button
+        android:id="@+id/btnFive"
+        style="@style/numberButtonStyle"
+        android:layout_width="63dp"
+        android:layout_height="63dp"
+        android:layout_below="@id/btnOne"
+        android:text="5" />
+
+    <Button
+        android:id="@+id/btnSix"
+        style="@style/numberButtonStyle"
+        android:layout_width="63dp"
+        android:layout_height="63dp"
+        android:layout_below="@id/btnOne"
+        android:layout_toRightOf="@id/btnFive"
+        android:text="6" />
+
+    <Button
+        android:id="@+id/btnSeven"
+        style="@style/numberButtonStyle"
+        android:layout_width="63dp"
+        android:layout_height="63dp"
+        android:layout_below="@id/btnOne"
+        android:layout_toRightOf="@id/btnSix"
+        android:text="7" />
+
+    <Button
+        android:id="@+id/btnEight"
+        style="@style/numberButtonStyle"
+        android:layout_width="63dp"
+        android:layout_height="63dp"
+        android:layout_below="@id/btnOne"
+        android:layout_toRightOf="@id/btnSeven"
+        android:text="8" />
+
+    <Button
+        android:id="@+id/btnNine"
+        style="@style/numberButtonStyle"
+        android:layout_width="63dp"
+        android:layout_height="63dp"
+        android:layout_below="@id/btnFive"
+        android:text="9" />
+
+    <Button
+        android:id="@+id/btnZero"
+        style="@style/numberButtonStyle"
+        android:layout_width="63dp"
+        android:layout_height="63dp"
+        android:layout_below="@id/btnFive"
+        android:layout_toRightOf="@id/btnNine"
+        android:text="0" />
+
+    <Button
+        android:id="@+id/btnReset"
+        style="@style/numberButtonStyle"
+        android:layout_width="63dp"
+        android:layout_height="63dp"
+        android:layout_below="@id/btnFive"
+        android:layout_toRightOf="@id/btnZero"
+        android:text="@string/reset" />
+
+    <Button
+        android:id="@+id/btnOk"
+        style="@style/numberButtonStyle"
+        android:layout_width="63dp"
+        android:layout_height="63dp"
+        android:layout_below="@id/btnFive"
+        android:layout_toRightOf="@id/btnReset"
+        android:text="@string/ok" />
+
+</RelativeLayout>

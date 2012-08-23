@@ -1,24 +1,28 @@
 package com.hy.bills.activity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.hy.bills.MainApplication;
-import com.hy.bills.activity.AccountBookActivity.AccountBookListAdapter.Holder;
 import com.hy.bills.domain.AccountBook;
 import com.hy.bills.domain.Bill;
 import com.hy.bills.domain.Category;
@@ -32,11 +36,12 @@ import com.hy.bills.utils.DateUtils;
 public class BillAddOrEditActivity extends BaseActivity implements OnClickListener {
 	private static final String TAG = "BillAddOrEditActivity";
 
-	private Bill bill;
 	private BillService billService;
 	private AccountBookService accountBookService;
 	private CategoryService categoryService;
 	private UserService userService;
+
+	private Bill bill;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -117,10 +122,16 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 		String[] billTypes = getResources().getStringArray(R.array.BillType);
 
 		if (bill == null) {
+			bill = new Bill();
 			AccountBook accountBook = accountBookService.getDefaultAccountBook();
 			accountBookName.setText(accountBook.getName());
-			billDate.setText(DateUtils.formatDate(new Date(), "yyyy-MM-dd"));
+			bill.setAccountBookId(accountBook.getId());
+			bill.setAccountBookName(accountBook.getName());
+			Date createDate = new Date();
+			billDate.setText(DateUtils.formatDate(createDate, "yyyy-MM-dd"));
+			bill.setBillDate(createDate);
 			billType.setText(billTypes[0]);
+			bill.setBillType(billTypes[0]);
 		} else {
 			accountBookName.setText(accountBookService.find(bill.getAccountBookId()).getName());
 			amount.setText(bill.getAmount().toString());
@@ -153,7 +164,7 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 			showSelectAccountBookDialog();
 			break;
 		case R.id.inputAmount:
-
+			showNumberDialog();
 			break;
 		case R.id.selectCategory:
 
@@ -177,7 +188,112 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 	}
 
 	private void showSelectAccountBookDialog() {
+		View view = LayoutInflater.from(this).inflate(R.layout.account_book_select_dialog, null);
+		ListView accoutBookList = (ListView) view.findViewById(R.id.accoutBookList);
+		final AccountBookSelectAdapter adapter = new AccountBookSelectAdapter();
+		accoutBookList.setAdapter(adapter);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.select_account_book).setIcon(R.drawable.account_book_big_icon).setView(view);
+		builder.setNegativeButton(R.string.cancel, null);
+		final AlertDialog dialog = builder.create();
 
+		accoutBookList.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				AccountBook accountBook = (AccountBook) adapter.getItem(position);
+				((EditText) view).setText(accountBook.getName());
+				bill.setAccountBookId(accountBook.getId());
+				bill.setAccountBookName(accountBook.getName());
+
+				dialog.dismiss();
+			}
+		});
+
+		dialog.show();
+	}
+
+	private void showNumberDialog() {
+		View view = LayoutInflater.from(this).inflate(R.layout.number_dialog, null);
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setView(view);
+		final AlertDialog dialog = builder.create();
+		
+		final EditText inputText = (EditText) findViewById(R.id.inputText);
+		OnClickListener listener = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				String number = inputText.getText().toString();
+				switch (v.getId()) {
+				case R.id.btnDot:
+					if (number.indexOf(".") == -1) {
+						number += ".";
+					}
+					break;
+				case R.id.btnOne:
+					number += "1";
+					break;
+				case R.id.btnTwo:
+					number += "2";
+					break;
+				case R.id.btnThree:
+					number += "3";
+					break;
+				case R.id.btnFour:
+					number += "4";
+					break;
+				case R.id.btnFive:
+					number += "5";
+					break;
+				case R.id.btnSix:
+					number += "6";
+					break;
+				case R.id.btnSeven:
+					number += "7";
+					break;
+				case R.id.btnEight:
+					number += "8";
+					break;
+				case R.id.btnNine:
+					number += "9";
+					break;
+				case R.id.btnZero:
+					number += "0";
+					break;
+				case R.id.btnReset:
+					number = "";
+					break;
+				case R.id.btnOk:
+					BigDecimal amount;
+					if (!number.equals(".") && number.length() != 0) {
+						amount = new BigDecimal(number);
+					} else {
+						amount = new BigDecimal(0);
+					}
+					bill.setAmount(amount);
+					dialog.dismiss();
+					break;
+				default:
+					break;
+				}
+				
+				inputText.setText(number);
+			}
+		};
+		view.findViewById(R.id.btnDot).setOnClickListener(listener);
+		view.findViewById(R.id.btnZero).setOnClickListener(listener);
+		view.findViewById(R.id.btnOne).setOnClickListener(listener);
+		view.findViewById(R.id.btnTwo).setOnClickListener(listener);
+		view.findViewById(R.id.btnThree).setOnClickListener(listener);
+		view.findViewById(R.id.btnFour).setOnClickListener(listener);
+		view.findViewById(R.id.btnFive).setOnClickListener(listener);
+		view.findViewById(R.id.btnSix).setOnClickListener(listener);
+		view.findViewById(R.id.btnSeven).setOnClickListener(listener);
+		view.findViewById(R.id.btnEight).setOnClickListener(listener);
+		view.findViewById(R.id.btnNine).setOnClickListener(listener);
+		view.findViewById(R.id.btnReset).setOnClickListener(listener);
+		view.findViewById(R.id.btnOk).setOnClickListener(listener);
+		
+		dialog.show();
 	}
 
 	private class AccountBookSelectAdapter extends BaseAdapter {
@@ -206,8 +322,8 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 		public View getView(int position, View convertView, ViewGroup parent) {
 			Holder holder;
 			if (convertView == null) {
-				convertView = LayoutInflater.from(BillAddOrEditActivity.this).inflate(R.layout.account_book_list_item,
-						null);
+				convertView = LayoutInflater.from(BillAddOrEditActivity.this).inflate(
+						R.layout.account_book_select_list_item, null);
 				holder = new Holder();
 				holder.accountBookIcon = (ImageView) convertView.findViewById(R.id.accountBookIcon);
 				holder.accountBookName = (TextView) convertView.findViewById(R.id.accountBookName);

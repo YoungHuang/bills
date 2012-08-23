@@ -75,5 +75,7 @@
     <string name="select_bill_type">计算方式</string>
     <string name="select_user_hint">请选择消费人，第一位为付款人</string>
     <string name="input_comment_hint">请输入消费心得或备注</string>
+    <string name="reset">重置</string>
+    <string name="ok">确定</string>
 
 </resources>

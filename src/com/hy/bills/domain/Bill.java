@@ -10,17 +10,17 @@ public class Bill {
 	// 支出表主键ID
 	private Integer id;
 	// 账本ID外键
-	private int accountBookId;
+	private Integer accountBookId;
 	// 账本名称
 	private String accountBookName;
 	// 支出类别ID外键
-	private int categoryId;
+	private Integer categoryId;
 	// 类别名称
 	private String categoryName;
 	// 付款方式ID外键
-	private int billWayId;
+	private Integer billWayId;
 	// 消费地点ID外键
-	private int addressId;
+	private Integer addressId;
 	// 消费金额
 	private BigDecimal amount;
 	// 消费日期
@@ -64,7 +64,7 @@ public class Bill {
 		return categoryId;
 	}
 
-	public void setCategoryId(int categoryId) {
+	public void setCategoryId(Integer categoryId) {
 		this.categoryId = categoryId;
 	}
 
@@ -76,19 +76,19 @@ public class Bill {
 		this.categoryName = categoryName;
 	}
 
-	public int getBillWayId() {
+	public Integer getBillWayId() {
 		return billWayId;
 	}
 
-	public void setBillWayId(int billWayId) {
+	public void setBillWayId(Integer billWayId) {
 		this.billWayId = billWayId;
 	}
 
-	public int getAddressId() {
+	public Integer getAddressId() {
 		return addressId;
 	}
 
-	public void setAddressId(int addressId) {
+	public void setAddressId(Integer addressId) {
 		this.addressId = addressId;
 	}
 

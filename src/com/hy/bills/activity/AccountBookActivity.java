@@ -173,12 +173,7 @@ public class AccountBookActivity extends BaseActivity {
 			}
 		});
 		// 取消
-		builder.setNegativeButton(R.string.cancel, new OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
-			}
-		});
+		builder.setNegativeButton(R.string.cancel, null);
 		builder.show();
 	}
 
