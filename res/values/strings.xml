@@ -62,17 +62,19 @@
     <string name="create_category_success">新建类别%s成功</string>
     <string name="edit_category_success">修改类别%s成功</string>
     <string name="delete_category_success">删除类别%s成功</string>
+    <string name="save_success">保存成功</string>
 
     <!-- other -->
     <string name="children_category_count">%s子类</string>
     <string name="category_name">类别名称</string>
     <string name="parent_category">所属分类</string>
     <string name="select_account_book">选择账本</string>
-    <string name="input_amount">输入金额</string>
     <string name="select_category">选择类别</string>
+    <string name="input_amount">输入金额</string>
     <string name="select_category_hint">请输入或选择消费类别</string>
     <string name="select_bill_date">选择日期</string>
     <string name="select_bill_type">计算方式</string>
+    <string name="select_user">选择消费人</string>
     <string name="select_user_hint">请选择消费人，第一位为付款人</string>
     <string name="input_comment_hint">请输入消费心得或备注</string>
     <string name="reset">重置</string>

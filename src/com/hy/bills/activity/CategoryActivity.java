@@ -1,28 +1,23 @@
 package com.hy.bills.activity;
 
-import java.util.List;
-
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseExpandableListAdapter;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
 import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hy.bills.MainApplication;
+import com.hy.bills.adapter.CategoryExListViewAdapter;
 import com.hy.bills.domain.Category;
 import com.hy.bills.service.CategoryService;
 
@@ -58,7 +53,7 @@ public class CategoryActivity extends BaseActivity {
 
 		// 显示类别列表
 		ExpandableListView categoryExListView = (ExpandableListView) this.findViewById(R.id.categoryExListView);
-		categoryExListViewAdapter = new CategoryExListViewAdapter();
+		categoryExListViewAdapter = new CategoryExListViewAdapter(this, categoryService);
 		categoryExListView.setAdapter(categoryExListViewAdapter);
 
 		// 设置ContextMenu
@@ -137,117 +132,5 @@ public class CategoryActivity extends BaseActivity {
 				categoryExListViewAdapter.dataChanged();
 			}
 		});
-	}
-
-	private class CategoryExListViewAdapter extends BaseExpandableListAdapter {
-		List<Category> groupCategories;
-
-		public CategoryExListViewAdapter() {
-			groupCategories = categoryService.findAllRootCategories();
-		}
-
-		@Override
-		public int getGroupCount() {
-			return groupCategories.size();
-		}
-
-		@Override
-		public int getChildrenCount(int groupPosition) {
-			Category groupCategory = groupCategories.get(groupPosition);
-			int count = categoryService.getChildrenCountByParentId(groupCategory.getId());
-
-			return count;
-		}
-
-		@Override
-		public Object getGroup(int groupPosition) {
-			return groupCategories.get(groupPosition);
-		}
-
-		@Override
-		public Object getChild(int groupPosition, int childPosition) {
-			Category groupCategory = groupCategories.get(groupPosition);
-			List<Category> childrenCategories = categoryService.findAllChildrenByParentId(groupCategory.getId());
-
-			return childrenCategories.get(childPosition);
-		}
-
-		@Override
-		public long getGroupId(int groupPosition) {
-			return groupPosition;
-		}
-
-		@Override
-		public long getChildId(int groupPosition, int childPosition) {
-			return childPosition;
-		}
-
-		@Override
-		public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-			GroupHolder groupHolder;
-			if (convertView == null) {
-				convertView = LayoutInflater.from(CategoryActivity.this).inflate(R.layout.category_group_list_item,
-						null);
-				groupHolder = new GroupHolder();
-				groupHolder.name = (TextView) convertView.findViewById(R.id.categoryName);
-				groupHolder.count = (TextView) convertView.findViewById(R.id.count);
-				convertView.setTag(groupHolder);
-			} else {
-				groupHolder = (GroupHolder) convertView.getTag();
-			}
-
-			Category category = groupCategories.get(groupPosition);
-			groupHolder.name.setText(category.getName());
-			int count = categoryService.getChildrenCountByParentId(category.getId());
-			groupHolder.count.setText(getString(R.string.children_category_count, count));
-
-			return convertView;
-		}
-
-		@Override
-		public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView,
-				ViewGroup parent) {
-			ChildHolder childHolder;
-			if (convertView == null) {
-				convertView = LayoutInflater.from(CategoryActivity.this).inflate(R.layout.category_child_list_item,
-						null);
-				childHolder = new ChildHolder();
-				childHolder.name = (TextView) convertView.findViewById(R.id.categoryName);
-				convertView.setTag(childHolder);
-			} else {
-				childHolder = (ChildHolder) convertView.getTag();
-			}
-
-			Category groupCategory = groupCategories.get(groupPosition);
-			List<Category> childrenCategories = categoryService.findAllChildrenByParentId(groupCategory.getId());
-			Category childCategory = childrenCategories.get(childPosition);
-			childHolder.name.setText(childCategory.getName());
-
-			return convertView;
-		}
-
-		@Override
-		public boolean isChildSelectable(int groupPosition, int childPosition) {
-			return true;
-		}
-
-		@Override
-		public boolean hasStableIds() {
-			return false;
-		}
-
-		public void dataChanged() {
-			groupCategories = categoryService.findAllRootCategories();
-			this.notifyDataSetChanged();
-		}
-
-		class GroupHolder {
-			TextView name;
-			TextView count;
-		}
-
-		class ChildHolder {
-			TextView name;
-		}
 	}
 }

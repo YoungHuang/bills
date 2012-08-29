@@ -1,10 +1,15 @@
 package com.hy.bills.activity;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,12 +22,18 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
+import android.widget.Toast;
+import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.hy.bills.MainApplication;
+import com.hy.bills.adapter.CategoryExListViewAdapter;
 import com.hy.bills.domain.AccountBook;
 import com.hy.bills.domain.Bill;
 import com.hy.bills.domain.Category;
@@ -40,6 +51,14 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 	private AccountBookService accountBookService;
 	private CategoryService categoryService;
 	private UserService userService;
+
+	EditText accountBookName;
+	EditText amount;
+	AutoCompleteTextView categoryName;
+	EditText billDate;
+	EditText billType;
+	EditText userListView;
+	EditText comment;
 
 	private Bill bill;
 
@@ -85,19 +104,19 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 	}
 
 	private void initView() {
-		EditText accountBookName = (EditText) findViewById(R.id.accountBookName);
+		accountBookName = (EditText) findViewById(R.id.accountBookName);
 		Button selectAccountbook = (Button) findViewById(R.id.selectAccountbook);
-		EditText amount = (EditText) findViewById(R.id.amount);
+		amount = (EditText) findViewById(R.id.amount);
 		Button inputAmount = (Button) findViewById(R.id.inputAmount);
-		AutoCompleteTextView categoryName = (AutoCompleteTextView) findViewById(R.id.categoryName);
+		categoryName = (AutoCompleteTextView) findViewById(R.id.categoryName);
 		Button selectCategory = (Button) findViewById(R.id.selectCategory);
-		EditText billDate = (EditText) findViewById(R.id.billDate);
+		billDate = (EditText) findViewById(R.id.billDate);
 		Button selectBillDate = (Button) findViewById(R.id.selectBillDate);
-		EditText billType = (EditText) findViewById(R.id.billType);
+		billType = (EditText) findViewById(R.id.billType);
 		Button selectBillType = (Button) findViewById(R.id.selectBillType);
-		EditText userList = (EditText) findViewById(R.id.userList);
+		userListView = (EditText) findViewById(R.id.userList);
 		Button selectUsers = (Button) findViewById(R.id.selectUsers);
-		EditText comment = (EditText) findViewById(R.id.comment);
+		comment = (EditText) findViewById(R.id.comment);
 		Button saveButton = (Button) findViewById(R.id.saveButton);
 		Button cancelButton = (Button) findViewById(R.id.cancelButton);
 
@@ -137,7 +156,7 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 			amount.setText(bill.getAmount().toString());
 			billDate.setText(DateUtils.formatDate(bill.getBillDate(), "yyyy-MM-dd"));
 			billType.setText(bill.getBillType());
-			userList.setText(getUserNamesStringByIds(bill.getUserIds()));
+			userListView.setText(getUserNamesStringByIds(bill.getUserIds()));
 			comment.setText(bill.getComment());
 		}
 	}
@@ -167,23 +186,38 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 			showNumberDialog();
 			break;
 		case R.id.selectCategory:
-
+			showSelectCategoryDialog();
 			break;
 		case R.id.selectBillDate:
-
+			showSelectBillDate();
 			break;
 		case R.id.selectBillType:
-
+			showSelectBillType();
 			break;
 		case R.id.selectUsers:
-
+			showSelectUsers();
 			break;
 		case R.id.saveButton:
-
+			addOrEditBill();
 			break;
 		case R.id.cancelButton:
-
+			finish();
 			break;
+		}
+	}
+
+	private void addOrEditBill() {
+		try {
+			if (bill.getId() == null) { // 新建
+				billService.save(bill);
+			} else { // 更新
+				billService.update(bill);
+			}
+
+			Toast.makeText(BillAddOrEditActivity.this, getString(R.string.save_success), Toast.LENGTH_SHORT).show();
+		} catch (Exception e) {
+			Log.e(TAG, "Create or save bill error", e);
+			Toast.makeText(BillAddOrEditActivity.this, R.string.database_error, Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -201,7 +235,7 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				AccountBook accountBook = (AccountBook) adapter.getItem(position);
-				((EditText) view).setText(accountBook.getName());
+				accountBookName.setText(accountBook.getName());
 				bill.setAccountBookId(accountBook.getId());
 				bill.setAccountBookName(accountBook.getName());
 
@@ -217,7 +251,7 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setView(view);
 		final AlertDialog dialog = builder.create();
-		
+
 		final EditText inputText = (EditText) findViewById(R.id.inputText);
 		OnClickListener listener = new OnClickListener() {
 			@Override
@@ -270,12 +304,13 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 						amount = new BigDecimal(0);
 					}
 					bill.setAmount(amount);
+					BillAddOrEditActivity.this.amount.setText(amount.toString());
 					dialog.dismiss();
 					break;
 				default:
 					break;
 				}
-				
+
 				inputText.setText(number);
 			}
 		};
@@ -292,8 +327,123 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 		view.findViewById(R.id.btnNine).setOnClickListener(listener);
 		view.findViewById(R.id.btnReset).setOnClickListener(listener);
 		view.findViewById(R.id.btnOk).setOnClickListener(listener);
-		
+
 		dialog.show();
+	}
+
+	private void showSelectCategoryDialog() {
+		View view = LayoutInflater.from(this).inflate(R.layout.category_select_dialog, null);
+		ExpandableListView categoryListView = (ExpandableListView) view.findViewById(R.id.categoryList);
+		final CategoryExListViewAdapter adapter = new CategoryExListViewAdapter(this, categoryService);
+		categoryListView.setAdapter(adapter);
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.select_category).setIcon(R.drawable.category_small_icon).setView(view);
+		builder.setNegativeButton(R.string.cancel, null);
+		final AlertDialog dialog = builder.create();
+
+		categoryListView.setOnGroupClickListener(new OnGroupClickListener() {
+			@Override
+			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+				Category category = (Category) adapter.getGroup(groupPosition);
+				bill.setCategoryId(category.getId());
+				bill.setCategoryName(category.getName());
+				categoryName.setText(category.getName());
+
+				dialog.dismiss();
+				return true;
+			}
+		});
+		categoryListView.setOnChildClickListener(new OnChildClickListener() {
+			@Override
+			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+				Category category = (Category) adapter.getChild(groupPosition, childPosition);
+				bill.setCategoryId(category.getId());
+				bill.setCategoryName(category.getName());
+				categoryName.setText(category.getName());
+
+				dialog.dismiss();
+				return true;
+			}
+		});
+
+		dialog.show();
+	}
+
+	private void showSelectBillDate() {
+		Calendar calendar = Calendar.getInstance();
+		DatePickerDialog dialog = new DatePickerDialog(this, new OnDateSetListener() {
+			@Override
+			public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+				Date date = new Date(year, monthOfYear, dayOfMonth);
+				bill.setBillDate(date);
+				billDate.setText(DateUtils.formatDate(date, "yyyy-MM-dd"));
+			}
+		}, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+
+		dialog.show();
+	}
+
+	private void showSelectBillType() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		final String[] billTypes = getResources().getStringArray(R.array.BillType);
+		builder.setTitle(R.string.select_bill_type);
+		builder.setNegativeButton(R.string.cancel, null);
+		builder.setItems(billTypes, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				String type = billTypes[which];
+				bill.setBillType(type);
+				billType.setText(type);
+			}
+		});
+		builder.show();
+	}
+
+	private void showSelectUsers() {
+		final List<User> userList = userService.findAll();
+		String[] userNames = new String[userList.size()];
+		for (int i = 0; i < userList.size(); i++) {
+			userNames[i] = userList.get(i).getName();
+		}
+
+		final List<User> selectedUsers = new ArrayList<User>();
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.select_user);
+		builder.setIcon(R.drawable.user_small_icon);
+		builder.setMultiChoiceItems(userNames, new boolean[] {}, new DialogInterface.OnMultiChoiceClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+				User user = userList.get(which);
+				if (isChecked) {
+					selectedUsers.add(user);
+				} else {
+					selectedUsers.remove(user);
+				}
+			}
+		});
+
+		builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				StringBuilder ids = new StringBuilder();
+				for (User user : selectedUsers) {
+					ids.append(user.getId()).append(",");
+				}
+
+				String idsStr = "";
+				if (ids.length() > 0) {
+					idsStr = ids.substring(0, ids.length() - 1);
+				}
+				bill.setUserIds(idsStr);
+
+				userListView.setText(getUserNamesStringByIds(idsStr));
+			}
+		});
+
+		builder.setNegativeButton(R.string.cancel, null);
+
+		builder.show();
 	}
 
 	private class AccountBookSelectAdapter extends BaseAdapter {
