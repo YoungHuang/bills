@@ -25,6 +25,7 @@
         <activity android:name=".CategoryActivity" />
         <activity android:name=".CategoryAddOrEditActivity" />
         <activity android:name=".BillAddOrEditActivity" />
+        <activity android:name=".BillActivity" />
     </application>
     
 </manifest>

@@ -23,5 +23,8 @@
         <item>借贷</item>
         <item>个人</item>
     </string-array>
+    <string-array name="SlideMenuBillActivity">
+		<item>切换账本</item>
+	</string-array>
 
 </resources>
