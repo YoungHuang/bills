@@ -15,24 +15,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hy.bills.MainApplication;
+import com.hy.bills.adapter.AccountBookSelectAdapter;
 import com.hy.bills.adapter.CategoryExListViewAdapter;
 import com.hy.bills.domain.AccountBook;
 import com.hy.bills.domain.Bill;
@@ -156,24 +153,9 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 			amount.setText(bill.getAmount().toString());
 			billDate.setText(DateUtils.formatDate(bill.getBillDate(), "yyyy-MM-dd"));
 			billType.setText(bill.getBillType());
-			userListView.setText(getUserNamesStringByIds(bill.getUserIds()));
+			userListView.setText(userService.getUserNamesStringByIds(bill.getUserIds()));
 			comment.setText(bill.getComment());
 		}
-	}
-
-	private String getUserNamesStringByIds(String userIds) {
-		List<User> userList = userService.findAllByIds(userIds);
-		StringBuilder str = new StringBuilder();
-		for (User user : userList) {
-			str.append(user.getName()).append(",");
-		}
-
-		String ret = "";
-		if (str.length() > 0) {
-			ret = str.substring(0, str.length() - 1);
-		}
-
-		return ret;
 	}
 
 	@Override
@@ -224,7 +206,7 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 	private void showSelectAccountBookDialog() {
 		View view = LayoutInflater.from(this).inflate(R.layout.account_book_select_dialog, null);
 		ListView accoutBookList = (ListView) view.findViewById(R.id.accoutBookList);
-		final AccountBookSelectAdapter adapter = new AccountBookSelectAdapter();
+		final AccountBookSelectAdapter adapter = new AccountBookSelectAdapter(this, accountBookService);
 		accoutBookList.setAdapter(adapter);
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(R.string.select_account_book).setIcon(R.drawable.account_book_big_icon).setView(view);
@@ -437,65 +419,12 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 				}
 				bill.setUserIds(idsStr);
 
-				userListView.setText(getUserNamesStringByIds(idsStr));
+				userListView.setText(userService.getUserNamesStringByIds(idsStr));
 			}
 		});
 
 		builder.setNegativeButton(R.string.cancel, null);
 
 		builder.show();
-	}
-
-	private class AccountBookSelectAdapter extends BaseAdapter {
-		private List<AccountBook> accountBookList;
-
-		public AccountBookSelectAdapter() {
-			accountBookList = accountBookService.findAll();
-		}
-
-		@Override
-		public int getCount() {
-			return accountBookList.size();
-		}
-
-		@Override
-		public Object getItem(int position) {
-			return accountBookList.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			Holder holder;
-			if (convertView == null) {
-				convertView = LayoutInflater.from(BillAddOrEditActivity.this).inflate(
-						R.layout.account_book_select_list_item, null);
-				holder = new Holder();
-				holder.accountBookIcon = (ImageView) convertView.findViewById(R.id.accountBookIcon);
-				holder.accountBookName = (TextView) convertView.findViewById(R.id.accountBookName);
-				convertView.setTag(holder);
-			} else {
-				holder = (Holder) convertView.getTag();
-			}
-
-			AccountBook accountBook = accountBookList.get(position);
-			if (accountBook.isDefault() == AccountBook.YES_DEFAULT) {
-				holder.accountBookIcon.setImageResource(R.drawable.account_book_default);
-			} else {
-				holder.accountBookIcon.setImageResource(R.drawable.account_book_big_icon);
-			}
-			holder.accountBookName.setText(accountBook.getName());
-
-			return convertView;
-		}
-
-		private class Holder {
-			ImageView accountBookIcon;
-			TextView accountBookName;
-		}
 	}
 }

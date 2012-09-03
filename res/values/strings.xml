@@ -16,6 +16,7 @@
     <string name="user_activity_title">人员管理(%s)</string>
     <string name="account_book_activity_title">账本管理(%s)</string>
     <string name="category_activity_title">类别管理(%s)</string>
+    <string name="bill_activity_title">查询消费-%1$s(%2$s)</string>
 
     <!-- Title -->
     <string name="user_dialog_title">%s人员</string>
@@ -79,5 +80,6 @@
     <string name="input_comment_hint">请输入消费心得或备注</string>
     <string name="reset">重置</string>
     <string name="ok">确定</string>
+    <string name="total_amount_and_count">共%1$s笔，合计消费%2$s</string>
 
 </resources>

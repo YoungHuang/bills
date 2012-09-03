@@ -112,6 +112,21 @@ public class UserService extends DaoSupport<User> {
 			cursor.close();
 		}
 	}
+	
+	public String getUserNamesStringByIds(String userIds) {
+		List<User> userList = findAllByIds(userIds);
+		StringBuilder str = new StringBuilder();
+		for (User user : userList) {
+			str.append(user.getName()).append(",");
+		}
+
+		String ret = "";
+		if (str.length() > 0) {
+			ret = str.substring(0, str.length() - 1);
+		}
+
+		return ret;
+	}
 
 	private User parseModel(Cursor cursor) {
 		User user = new User();

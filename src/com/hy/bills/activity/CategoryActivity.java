@@ -98,6 +98,8 @@ public class CategoryActivity extends BaseActivity {
 		case R.id.edit:
 			Intent intent = new Intent(this, CategoryAddOrEditActivity.class);
 			intent.putExtra("categoryId", category.getId());
+			startActivityForResult(intent, 1);
+			
 			break;
 		case R.id.delete:
 			deleteCategory();
