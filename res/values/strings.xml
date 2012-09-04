@@ -39,6 +39,7 @@
     <string name="user_name_hint">人员名称</string>
     <string name="user_delete_confirm">你确定要删除%s用户吗?</string>
     <string name="account_book_delete_confirm">账本删除后相关消费记录也会同时删除,你确定要删除%s吗?</string>
+    <string name="bill_delete_confirm">你确定要删除%s消费记录吗?</string>
     <string name="account_book_name_hint">账本名称</string>
     <string name="set_default_account_book">设置为默认账本</string>
     <string name="db_backup_title">数据备份</string>
@@ -64,6 +65,7 @@
     <string name="edit_category_success">修改类别%s成功</string>
     <string name="delete_category_success">删除类别%s成功</string>
     <string name="save_success">保存成功</string>
+    <string name="delete_bill_success">删除%s消费记录成功</string>
 
     <!-- other -->
     <string name="children_category_count">%s子类</string>

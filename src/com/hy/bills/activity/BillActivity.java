@@ -3,7 +3,9 @@ package com.hy.bills.activity;
 import java.util.List;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -19,6 +21,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hy.bills.MainApplication;
 import com.hy.bills.adapter.AccountBookSelectAdapter;
@@ -36,7 +39,7 @@ public class BillActivity extends BaseActivity {
 	private AccountBookService accountBookService;
 	private UserService userService;
 	private BillListAdapter billListAdapter;
-	
+
 	private AccountBook accountBook;
 
 	@Override
@@ -81,7 +84,7 @@ public class BillActivity extends BaseActivity {
 		String title = getString(R.string.bill_activity_title, accountBook.getName(), billListAdapter.getCount());
 		setTitle(title);
 	}
-	
+
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		AdapterContextMenuInfo adapterContextMenuInfo = (AdapterContextMenuInfo) menuInfo;
@@ -102,10 +105,10 @@ public class BillActivity extends BaseActivity {
 			Intent intent = new Intent(this, BillAddOrEditActivity.class);
 			intent.putExtra("billId", bill.getId());
 			startActivityForResult(intent, 1);
-			
+
 			break;
 		case R.id.delete:
-//			deleteBill(bill);
+			deleteBill(bill);
 			break;
 		default:
 			return super.onContextItemSelected(item);
@@ -113,13 +116,13 @@ public class BillActivity extends BaseActivity {
 
 		return true;
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		billListAdapter.dataChanged();
 		super.onActivityResult(requestCode, resultCode, data);
 	}
-	
+
 	private void showAccountBookSelectDialog() {
 		View view = LayoutInflater.from(this).inflate(R.layout.account_book_select_dialog, null);
 		ListView accoutBookList = (ListView) view.findViewById(R.id.accoutBookList);
@@ -135,8 +138,7 @@ public class BillActivity extends BaseActivity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				accountBook = (AccountBook) adapter.getItem(position);
 				billListAdapter.dataChanged();
-				setTitle();
-				
+
 				dialog.dismiss();
 			}
 		});
@@ -144,11 +146,27 @@ public class BillActivity extends BaseActivity {
 		dialog.show();
 	}
 
+	private void deleteBill(final Bill bill) {
+		String title = getString(R.string.delete_prompt);
+		String message = getString(R.string.bill_delete_confirm, bill.getCategoryName());
+		showAlertDialog(title, message, new OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				billService.delete(bill.getId());
+				Toast.makeText(BillActivity.this,
+						getString(R.string.delete_bill_success, bill.getCategoryName()),
+						Toast.LENGTH_SHORT).show();
+
+				billListAdapter.dataChanged();
+			}
+		});
+	}
+
 	private class BillListAdapter extends BaseAdapter {
 		private List<Bill> billList;
 
 		public BillListAdapter() {
-			billList = billService.findAllByAccountBookId(accountBook.getId());
+			billList = billService.findAllByAccountBookIdOrderByDate(accountBook.getId());
 		}
 
 		@Override
@@ -219,8 +237,10 @@ public class BillActivity extends BaseActivity {
 		}
 
 		public void dataChanged() {
-			billList = billService.findAllByAccountBookId(accountBook.getId());
+			billList = billService.findAllByAccountBookIdOrderByDate(accountBook.getId());
 			this.notifyDataSetChanged();
+			
+			setTitle();
 		}
 	}
 }
