@@ -7,6 +7,7 @@ import com.hy.bills.service.AccountBookService;
 import com.hy.bills.service.BillService;
 import com.hy.bills.service.CategoryService;
 import com.hy.bills.service.DataBaseBackupService;
+import com.hy.bills.service.StatisticsService;
 import com.hy.bills.service.UserService;
 
 public class MainApplication extends Application {
@@ -15,6 +16,7 @@ public class MainApplication extends Application {
 	private AccountBookService accountBookService;
 	private CategoryService categoryService;
 	private BillService billService;
+	private StatisticsService statisticsService;
 
 	@Override
 	public void onCreate() {
@@ -30,6 +32,7 @@ public class MainApplication extends Application {
 		accountBookService = new AccountBookService();
 		categoryService = new CategoryService();
 		billService = new BillService();
+		statisticsService = new StatisticsService();
 	}
 
 	private void initDB() {
@@ -54,5 +57,9 @@ public class MainApplication extends Application {
 	
 	public BillService getBillService() {
 		return billService;
+	}
+	
+	public StatisticsService getStatisticsService() {
+		return statisticsService;
 	}
 }

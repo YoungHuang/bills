@@ -26,5 +26,9 @@
     <string-array name="SlideMenuBillActivity">
 		<item>切换账本</item>
 	</string-array>
+	<string-array name="SlideMenuStatisticsActivity">
+		<item>切换账本</item>
+		<item>导出表格</item>
+	</string-array>
 
 </resources>

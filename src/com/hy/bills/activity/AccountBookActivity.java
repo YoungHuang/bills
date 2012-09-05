@@ -64,8 +64,7 @@ public class AccountBookActivity extends BaseActivity {
 		registerForContextMenu(accountBookListView);
 
 		// 设置标题
-		String title = getString(R.string.account_book_activity_title,
-				new Object[] { accountBookListAdapter.getCount() });
+		String title = getString(R.string.account_book_activity_title, accountBookListAdapter.getCount());
 		setTitle(title);
 	}
 

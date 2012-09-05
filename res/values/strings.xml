@@ -17,6 +17,7 @@
     <string name="account_book_activity_title">账本管理(%s)</string>
     <string name="category_activity_title">类别管理(%s)</string>
     <string name="bill_activity_title">查询消费-%1$s(%2$s)</string>
+    <string name="statistics_activity_title">统计管理-%1$s</string>
 
     <!-- Title -->
     <string name="user_dialog_title">%s人员</string>
@@ -46,6 +47,8 @@
     <string name="db_backup_button">数据备份</string>
     <string name="db_restore_button">数据还原</string>
     <string name="category_delete_confirm">你确定要删除%s类别吗?</string>
+    <string name="statistics_progres_dialog_title">统计</string>
+	<string name="statistics_progress_dialog_message">正在统计中，请稍候&#8230;</string>
 
     <!-- Toast Message -->
     <string name="chinese_english_num">%s必须是英文、中文与数字</string>
