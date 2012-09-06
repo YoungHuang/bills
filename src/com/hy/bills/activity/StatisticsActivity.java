@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.hy.bills.MainApplication;
 import com.hy.bills.adapter.AccountBookSelectAdapter;
@@ -27,6 +28,7 @@ public class StatisticsActivity extends BaseActivity {
 	private AccountBook accountBook;
 	
 	private ProgressDialog progressDialog;
+	private TextView statisticsResultView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class StatisticsActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		appendBodyView(R.layout.statistics_activity);
 
+		statisticsResultView = (TextView) findViewById(R.id.statisticsResult);
 		initVariables();
 
 		// 创建滑动菜单
@@ -68,7 +71,9 @@ public class StatisticsActivity extends BaseActivity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case STATISTICS:
-				
+				String result = (String) msg.obj;
+				statisticsResultView.setText(result);
+				progressDialog.dismiss();
 				break;
 			default:
 				super.handleMessage(msg);
@@ -80,7 +85,7 @@ public class StatisticsActivity extends BaseActivity {
 	private class StatisticsThread extends Thread {
 		@Override
 		public void run() {
-			String result = "";
+			String result = statisticsService.getBillStatistics(accountBook.getId());;
 			Message message = new Message();
 			message.what = STATISTICS;
 			message.obj = result;

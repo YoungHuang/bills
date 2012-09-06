@@ -32,7 +32,7 @@ public class MainApplication extends Application {
 		accountBookService = new AccountBookService();
 		categoryService = new CategoryService();
 		billService = new BillService();
-		statisticsService = new StatisticsService();
+		statisticsService = new StatisticsService(this, userService, billService);
 	}
 
 	private void initDB() {

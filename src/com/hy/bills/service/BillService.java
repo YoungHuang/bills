@@ -107,6 +107,22 @@ public class BillService extends DaoSupport<Bill> {
 
 	public List<Bill> findAllByAccountBookIdOrderByDate(Integer accountBookId) {
 		SQLiteDatabase db = sqliteHelper.getReadableDatabase();
+		String sql = "select * from Bill where accountBookId=? order by billDate";
+		Cursor cursor = db.rawQuery(sql, new String[] { accountBookId.toString() });
+		try {
+			List<Bill> billList = new ArrayList<Bill>();
+			while (cursor.moveToNext()) {
+				billList.add(parseModel(cursor));
+			}
+
+			return billList;
+		} finally {
+			cursor.close();
+		}
+	}
+	
+	public List<Bill> findAllByAccountBookId(Integer accountBookId) {
+		SQLiteDatabase db = sqliteHelper.getReadableDatabase();
 		String sql = "select * from Bill";
 		Cursor cursor = db.rawQuery(sql, null);
 		try {
