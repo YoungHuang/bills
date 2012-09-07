@@ -182,4 +182,30 @@ public class CategoryService extends DaoSupport<Category> {
 
 		return category;
 	}
+	
+	public List<CategoryStatistics> getCategoryStatistics(Integer id) {
+		SQLiteDatabase db = sqliteHelper.getReadableDatabase();
+		String sql = "select c.categoryName as categoryName, count(b.id) as count, sum(b.amount) as totalAmount  from Bill as b, Category as c where b.id=c.id and c.parentId=? group by c.id";
+		Cursor cursor = db.rawQuery(sql, new String[] { id.toString() });
+		try {
+			List<CategoryStatistics> categoryStatsList = new ArrayList<CategoryStatistics>();
+			while (cursor.moveToNext()) {
+				CategoryStatistics stats = new CategoryStatistics();
+				stats.categoryName = cursor.getString(cursor.getColumnIndex("categoryName"));
+				stats.count = cursor.getInt(cursor.getColumnIndex("count"));
+				stats.totalAmount = cursor.getDouble(cursor.getColumnIndex("totalAmount"));
+				categoryStatsList.add(stats);
+			}
+
+			return categoryStatsList;
+		} finally {
+			cursor.close();
+		}
+	}
+	
+	public class CategoryStatistics {
+		public String categoryName;
+		public int count;
+		public double totalAmount;
+	}
 }

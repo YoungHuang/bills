@@ -39,8 +39,12 @@ public class BaseActivity extends Activity {
 	}
 
 	protected void appendBodyView(int resource) {
-		LinearLayout bodyLayout = (LinearLayout) findViewById(R.id.bodyLayout);
 		View view = LayoutInflater.from(this).inflate(resource, null);
+		appendBodyView(view);
+	}
+	
+	protected void appendBodyView(View view) {
+		LinearLayout bodyLayout = (LinearLayout) findViewById(R.id.bodyLayout);
 		LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,
 				LinearLayout.LayoutParams.FILL_PARENT);
 		bodyLayout.addView(view, layoutParams);

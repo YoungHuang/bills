@@ -46,7 +46,9 @@ public class CategoryActivity extends BaseActivity {
 					Intent intent = new Intent(CategoryActivity.this, CategoryAddOrEditActivity.class);
 					startActivityForResult(intent, 0);
 				} else if (position == 1) { // 统计类别
-
+					Intent intent = new Intent(CategoryActivity.this, CategoryChartActivity.class);
+					intent.putExtra("categoryId", category.getId());
+					startActivity(intent);
 				}
 			}
 		});
