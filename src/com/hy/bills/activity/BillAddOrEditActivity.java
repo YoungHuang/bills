@@ -234,11 +234,14 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 		builder.setView(view);
 		final AlertDialog dialog = builder.create();
 
-		final EditText inputText = (EditText) findViewById(R.id.inputText);
+		final EditText inputText = (EditText) view.findViewById(R.id.inputText);
 		OnClickListener listener = new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String number = inputText.getText().toString();
+				String number = "";
+				if (inputText.getText() != null) {
+					number = inputText.getText().toString();
+				}
 				switch (v.getId()) {
 				case R.id.btnDot:
 					if (number.indexOf(".") == -1) {

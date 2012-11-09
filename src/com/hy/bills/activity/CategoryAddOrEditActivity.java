@@ -124,8 +124,10 @@ public class CategoryAddOrEditActivity extends BaseActivity implements OnClickLi
 		}
 
 		try {
+			boolean isCreate = false;
 			if (category == null) { // 新建
 				category = new Category();
+				isCreate = true;
 			}
 			category.setName(newName);
 			if (!parentCategories.getSelectedItem().toString().equals("--请选择--")) {
@@ -133,7 +135,7 @@ public class CategoryAddOrEditActivity extends BaseActivity implements OnClickLi
 				category.setParentId(pCategory.getId());
 			}
 			
-			if (category == null) { // 新建
+			if (isCreate) { // 新建
 				categoryService.save(category);
 				Toast.makeText(CategoryAddOrEditActivity.this, getString(R.string.create_category_success, newName),
 						Toast.LENGTH_SHORT).show();

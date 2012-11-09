@@ -18,7 +18,7 @@ public class CategoryService extends DaoSupport<Category> {
 
 		db.execSQL("create table Category(id integer primary key autoincrement, name varchar(20) not null, status integer not null, type integer not null, parentId integer not null, createDate long not null)");
 		// Insert testing data
-		String sql = "insert into Category(name, status, type, parentId createDate) values(?, ?, ?, ?, ?)";
+		String sql = "insert into Category(name, status, type, parentId, createDate) values(?, ?, ?, ?, ?)";
 		for (int i = 0; i < 10; i++) {
 			Category category = new Category();
 			category.setName("Category" + i);
@@ -31,7 +31,7 @@ public class CategoryService extends DaoSupport<Category> {
 	@Override
 	public void save(Category category) {
 		SQLiteDatabase db = sqliteHelper.getWritableDatabase();
-		String sql = "insert into Category(name, status, type, parentId createDate) values(?, ?, ?, ?, ?)";
+		String sql = "insert into Category(name, status, type, parentId, createDate) values(?, ?, ?, ?, ?)";
 		db.execSQL(sql,
 				new Object[] { category.getName(), category.getStatus(), category.getType(), category.getParentId(),
 						System.currentTimeMillis() });
