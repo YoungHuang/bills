@@ -10,14 +10,30 @@
         style="@style/listViewItemStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="20dp" />
+        android:paddingLeft="5dp" />
 
-    <TextView
-        android:id="@+id/count"
+    <LinearLayout
+        android:id="@+id/collapseLayout"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:textColor="#ff000000"
-        android:textSize="17sp" />
+        android:layout_height="fill_parent"
+        android:layout_alignParentRight="true" >
+
+        <TextView
+            android:id="@+id/count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:textColor="#ff000000"
+            android:textSize="17sp"
+            android:layout_gravity="center" />
+        
+        <ImageView
+            android:id="@+id/arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/down_arr"
+            android:layout_gravity="center" />
+    </LinearLayout>
 
 </RelativeLayout>

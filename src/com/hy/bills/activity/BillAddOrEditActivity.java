@@ -15,22 +15,26 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hy.bills.MainApplication;
 import com.hy.bills.adapter.AccountBookSelectAdapter;
-import com.hy.bills.adapter.CategoryExListViewAdapter;
 import com.hy.bills.domain.AccountBook;
 import com.hy.bills.domain.Bill;
 import com.hy.bills.domain.Category;
@@ -56,6 +60,8 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 	EditText billType;
 	EditText userListView;
 	EditText comment;
+	
+	ExpandableListView categoryListView;
 
 	private Bill bill;
 
@@ -318,8 +324,9 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 
 	private void showSelectCategoryDialog() {
 		View view = LayoutInflater.from(this).inflate(R.layout.category_select_dialog, null);
-		ExpandableListView categoryListView = (ExpandableListView) view.findViewById(R.id.categoryList);
-		final CategoryExListViewAdapter adapter = new CategoryExListViewAdapter(this, categoryService);
+		categoryListView = (ExpandableListView) view.findViewById(R.id.categoryList);
+		categoryListView.setGroupIndicator(null);
+		final CategorySelectListViewAdapter adapter = new CategorySelectListViewAdapter();
 		categoryListView.setAdapter(adapter);
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -330,6 +337,7 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 		categoryListView.setOnGroupClickListener(new OnGroupClickListener() {
 			@Override
 			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+				Log.d(TAG, "onGroupClick: " + groupPosition);
 				Category category = (Category) adapter.getGroup(groupPosition);
 				bill.setCategoryId(category.getId());
 				bill.setCategoryName(category.getName());
@@ -342,6 +350,7 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 		categoryListView.setOnChildClickListener(new OnChildClickListener() {
 			@Override
 			public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+				Log.d(TAG, "onChildClick: " + childPosition);
 				Category category = (Category) adapter.getChild(groupPosition, childPosition);
 				bill.setCategoryId(category.getId());
 				bill.setCategoryName(category.getName());
@@ -429,5 +438,142 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 		builder.setNegativeButton(R.string.cancel, null);
 
 		builder.show();
+	}
+	
+	private class OnArrowClickListener implements OnClickListener {
+		@Override
+		public void onClick(View v) {
+			int groupPosition = (Integer) v.getTag();
+			Log.d(TAG, "arrowclicked: " + groupPosition);
+			if (categoryListView.isGroupExpanded(groupPosition)) {
+				categoryListView.collapseGroup(groupPosition);
+			} else {
+				categoryListView.expandGroup(groupPosition);
+			}
+		}
+	}
+	
+	OnArrowClickListener onArrowClickListener = new OnArrowClickListener();
+	
+	private class CategorySelectListViewAdapter extends BaseExpandableListAdapter {
+		List<Category> groupCategories;
+
+		public CategorySelectListViewAdapter() {
+			groupCategories = categoryService.findAllRootCategories();
+		}
+
+		@Override
+		public int getGroupCount() {
+			return groupCategories.size();
+		}
+
+		@Override
+		public int getChildrenCount(int groupPosition) {
+			Category groupCategory = groupCategories.get(groupPosition);
+			int count = categoryService.getChildrenCountByParentId(groupCategory.getId());
+
+			return count;
+		}
+
+		@Override
+		public Object getGroup(int groupPosition) {
+			return groupCategories.get(groupPosition);
+		}
+
+		@Override
+		public Object getChild(int groupPosition, int childPosition) {
+			Category groupCategory = groupCategories.get(groupPosition);
+			List<Category> childrenCategories = categoryService.findAllChildrenByParentId(groupCategory.getId());
+
+			return childrenCategories.get(childPosition);
+		}
+
+		@Override
+		public long getGroupId(int groupPosition) {
+			return groupPosition;
+		}
+
+		@Override
+		public long getChildId(int groupPosition, int childPosition) {
+			return childPosition;
+		}
+
+		@Override
+		public View getGroupView(final int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+			GroupHolder groupHolder;
+			if (convertView == null) {
+				convertView = LayoutInflater.from(BillAddOrEditActivity.this).inflate(R.layout.category_group_list_item, null);
+				groupHolder = new GroupHolder();
+				groupHolder.collapseLayout = (LinearLayout) convertView.findViewById(R.id.collapseLayout);
+				groupHolder.name = (TextView) convertView.findViewById(R.id.categoryName);
+				groupHolder.count = (TextView) convertView.findViewById(R.id.count);
+				groupHolder.arrow = (ImageView) convertView.findViewById(R.id.arrow);
+				convertView.setTag(groupHolder);
+			} else {
+				groupHolder = (GroupHolder) convertView.getTag();
+			}
+
+			Category category = groupCategories.get(groupPosition);
+			groupHolder.name.setText(category.getName());
+			int count = categoryService.getChildrenCountByParentId(category.getId());
+			groupHolder.count.setText(BillAddOrEditActivity.this.getString(R.string.children_category_count, count));
+
+			if (isExpanded) {
+				groupHolder.arrow.setImageResource(R.drawable.up_arr);
+			} else {
+				groupHolder.arrow.setImageResource(R.drawable.down_arr);
+			}
+			groupHolder.collapseLayout.setTag(groupPosition);
+			groupHolder.collapseLayout.setOnClickListener(onArrowClickListener);
+
+			return convertView;
+		}
+		
+		@Override
+		public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView,
+				ViewGroup parent) {
+			ChildHolder childHolder;
+			if (convertView == null) {
+				convertView = LayoutInflater.from(BillAddOrEditActivity.this).inflate(R.layout.category_child_list_item, null);
+				childHolder = new ChildHolder();
+				childHolder.name = (TextView) convertView.findViewById(R.id.categoryName);
+				convertView.setTag(childHolder);
+			} else {
+				childHolder = (ChildHolder) convertView.getTag();
+			}
+
+			Category groupCategory = groupCategories.get(groupPosition);
+			List<Category> childrenCategories = categoryService.findAllChildrenByParentId(groupCategory.getId());
+			Category childCategory = childrenCategories.get(childPosition);
+			childHolder.name.setText(childCategory.getName());
+
+			return convertView;
+		}
+
+		@Override
+		public boolean isChildSelectable(int groupPosition, int childPosition) {
+			return true;
+		}
+
+		@Override
+		public boolean hasStableIds() {
+			return false;
+		}
+
+		public void dataChanged() {
+			groupCategories = categoryService.findAllRootCategories();
+			this.notifyDataSetChanged();
+		}
+
+		class GroupHolder {
+			LinearLayout collapseLayout;
+			TextView name;
+			TextView count;
+			ImageView arrow;
+		}
+
+		class ChildHolder {
+			TextView name;
+		}
 	}
 }

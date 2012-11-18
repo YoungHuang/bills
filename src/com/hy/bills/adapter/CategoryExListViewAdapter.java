@@ -5,8 +5,10 @@ import java.util.List;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hy.bills.activity.R;
@@ -68,6 +70,7 @@ public class CategoryExListViewAdapter extends BaseExpandableListAdapter {
 			groupHolder = new GroupHolder();
 			groupHolder.name = (TextView) convertView.findViewById(R.id.categoryName);
 			groupHolder.count = (TextView) convertView.findViewById(R.id.count);
+			groupHolder.arrow = (ImageView) convertView.findViewById(R.id.arrow);
 			convertView.setTag(groupHolder);
 		} else {
 			groupHolder = (GroupHolder) convertView.getTag();
@@ -77,6 +80,12 @@ public class CategoryExListViewAdapter extends BaseExpandableListAdapter {
 		groupHolder.name.setText(category.getName());
 		int count = categoryService.getChildrenCountByParentId(category.getId());
 		groupHolder.count.setText(context.getString(R.string.children_category_count, count));
+
+		if (isExpanded) {
+			groupHolder.arrow.setImageResource(R.drawable.up_arr);
+		} else {
+			groupHolder.arrow.setImageResource(R.drawable.down_arr);
+		}
 
 		return convertView;
 	}
@@ -120,6 +129,7 @@ public class CategoryExListViewAdapter extends BaseExpandableListAdapter {
 	class GroupHolder {
 		TextView name;
 		TextView count;
+		ImageView arrow;
 	}
 
 	class ChildHolder {

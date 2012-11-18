@@ -55,6 +55,7 @@ public class CategoryActivity extends BaseActivity {
 
 		// 显示类别列表
 		ExpandableListView categoryExListView = (ExpandableListView) this.findViewById(R.id.categoryExListView);
+		categoryExListView.setGroupIndicator(null);
 		categoryExListViewAdapter = new CategoryExListViewAdapter(this, categoryService);
 		categoryExListView.setAdapter(categoryExListViewAdapter);
 
