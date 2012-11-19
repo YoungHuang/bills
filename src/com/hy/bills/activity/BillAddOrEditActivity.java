@@ -64,6 +64,11 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 	ExpandableListView categoryListView;
 
 	private Bill bill;
+	
+	private List<User> userList;
+	private List<User> selectedUsers = new ArrayList<User>();
+	private String[] userNames;
+	private boolean[] checkedItems;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +90,8 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 		setTitle();
 
 		initView();
+		
+		initUsers();
 	}
 
 	private void initVariables() {
@@ -201,7 +208,7 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 			} else { // 更新
 				billService.update(bill);
 			}
-
+			finish();
 			Toast.makeText(BillAddOrEditActivity.this, getString(R.string.save_success), Toast.LENGTH_SHORT).show();
 		} catch (Exception e) {
 			Log.e(TAG, "Create or save bill error", e);
@@ -394,25 +401,32 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 		builder.show();
 	}
 
-	private void showSelectUsers() {
-		final List<User> userList = userService.findAll();
-		String[] userNames = new String[userList.size()];
+	private void initUsers() {
+		userList = userService.findAll();
+		userNames = new String[userList.size()];
 		for (int i = 0; i < userList.size(); i++) {
 			userNames[i] = userList.get(i).getName();
 		}
-
-		final List<User> selectedUsers = new ArrayList<User>();
+		checkedItems = new boolean[userList.size()];
+		for (int i = 0; i < userList.size(); i++) {
+			checkedItems[i] = false;
+		}
+	}
+	
+	private void showSelectUsers() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(R.string.select_user);
 		builder.setIcon(R.drawable.user_small_icon);
-		builder.setMultiChoiceItems(userNames, new boolean[] {}, new DialogInterface.OnMultiChoiceClickListener() {
+		builder.setMultiChoiceItems(userNames, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which, boolean isChecked) {
 				User user = userList.get(which);
 				if (isChecked) {
 					selectedUsers.add(user);
+					checkedItems[which] = true;
 				} else {
 					selectedUsers.remove(user);
+					checkedItems[which] = false;
 				}
 			}
 		});
@@ -421,17 +435,21 @@ public class BillAddOrEditActivity extends BaseActivity implements OnClickListen
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				StringBuilder ids = new StringBuilder();
+				StringBuilder names = new StringBuilder();
 				for (User user : selectedUsers) {
 					ids.append(user.getId()).append(",");
+					names.append(user.getName()).append(",");
 				}
 
 				String idsStr = "";
+				String nameStr = "";
 				if (ids.length() > 0) {
 					idsStr = ids.substring(0, ids.length() - 1);
+					nameStr = names.substring(0, names.length() - 1);
 				}
 				bill.setUserIds(idsStr);
 
-				userListView.setText(userService.getUserNamesStringByIds(idsStr));
+				userListView.setText(nameStr);
 			}
 		});
 

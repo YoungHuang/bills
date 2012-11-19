@@ -32,7 +32,7 @@ public class Bill {
 	// 备注
 	private String comment;
 	// 添加日期
-	private Date createDate;
+	private Date createDate = new Date();
 	// 状态 0失效 1启用
 	private int status = STATUS_ACTIVE;
 
