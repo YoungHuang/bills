@@ -108,7 +108,9 @@ public class CategoryActivity extends BaseActivity {
 			deleteCategory();
 			break;
 		case R.id.statistic:
-
+			intent = new Intent(CategoryActivity.this, CategoryChartActivity.class);
+			intent.putExtra("categoryId", category.getId());
+			startActivity(intent);
 			break;
 		default:
 			return super.onContextItemSelected(item);

@@ -55,7 +55,7 @@ public class StatisticsService {
 					Statistics stat = stats.get(user);
 					if (stat == null) {
 						stat = new Statistics();
-						stats.put(payUser, stat);
+						stats.put(user, stat);
 					}
 					stat.averAmount += amount;
 					Double out = stat.outAmount.get(payUser);
@@ -80,11 +80,11 @@ public class StatisticsService {
 			ret.append("均分消费（个人部分）：").append(stat.averAmount).append("元\r\n");
 			ret.append("\r\n");
 			for (User oUser : stat.inAmount.keySet()) {
-				ret.append("用户").append(oUser.getName()).append("欠款：").append(stat.inAmount.get(user)).append("元\r\n");
+				ret.append("用户").append(oUser.getName()).append("欠款：").append(stat.inAmount.get(oUser)).append("元\r\n");
 			}
 			ret.append("\r\n");
 			for (User oUser : stat.outAmount.keySet()) {
-				ret.append("欠用户").append(oUser.getName()).append("：").append(stat.outAmount.get(user)).append("元\r\n");
+				ret.append("欠用户").append(oUser.getName()).append("：").append(stat.outAmount.get(oUser)).append("元\r\n");
 			}
 			ret.append("\r\n");
 		}
@@ -94,9 +94,9 @@ public class StatisticsService {
 
 	private class Statistics {
 		// Personal amount
-		Double perAmount;
+		Double perAmount = 0d;
 		// Average amount
-		Double averAmount;
+		Double averAmount =0d;
 		Map<User, Double> inAmount;
 		Map<User, Double> outAmount;
 		
